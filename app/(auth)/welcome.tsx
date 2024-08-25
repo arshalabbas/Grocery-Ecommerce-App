@@ -15,12 +15,12 @@ const Welcome = () => {
   const router = useRouter();
   const isLastSlide = activeIndex === onboarding.length - 1;
   return (
-    <SafeAreaView className="bg-background flex h-full items-center justify-between">
+    <SafeAreaView className="flex h-full items-center justify-between bg-background">
       <View className="flex w-full items-end justify-end">
         <TouchableOpacity
           className="p-5"
           onPress={() => {
-            router.replace("/(auth)/login");
+            router.push("/(auth)/login");
           }}
         >
           <Text className="font-pbold text-black">Skip</Text>
@@ -30,10 +30,10 @@ const Welcome = () => {
         ref={swiperRef}
         loop={false}
         dot={
-          <View className="bg-secondary-muted/30 mx-1 h-[4px] w-[32px] rounded-full" />
+          <View className="mx-1 h-[4px] w-[32px] rounded-full bg-secondary-muted/30" />
         }
         activeDot={
-          <View className="bg-primary mx-1 h-[4px] w-[32px] rounded-full" />
+          <View className="mx-1 h-[4px] w-[32px] rounded-full bg-primary" />
         }
         onIndexChanged={setActiveIndex}
       >
@@ -51,7 +51,7 @@ const Welcome = () => {
               <Text className="mx-10 text-center text-3xl font-bold text-black">
                 {item.title}
               </Text>
-              <Text className="font-JakartaSemiBold text-secondary-muted mx-10 mt-3 text-center">
+              <Text className="font-JakartaSemiBold mx-10 mt-3 text-center text-secondary-muted">
                 {item.description}
               </Text>
             </View>
@@ -63,7 +63,7 @@ const Welcome = () => {
           title={isLastSlide ? "Get Started" : "Next"}
           onPress={() =>
             isLastSlide
-              ? router.replace("/(auth)/login")
+              ? router.push("/(auth)/login")
               : swiperRef.current?.scrollBy(1)
           }
           containerStyles={{ marginBottom: 30 }}

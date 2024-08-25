@@ -3,7 +3,7 @@ import { useFonts } from "expo-font";
 import { useEffect } from "react";
 import AuthProvider from "@/provider/AuthProvider";
 
-export default function RootLayout() {
+const RootLayout = () => {
   const [fontsLoaded, error] = useFonts({
     "Poppins-Black": require("../assets/fonts/Poppins-Black.ttf"),
     "Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),
@@ -31,7 +31,11 @@ export default function RootLayout() {
     <AuthProvider>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" />
+        <Stack.Screen name="(auth)" />
+        <Stack.Screen name="(tabs)" />
       </Stack>
     </AuthProvider>
   );
-}
+};
+
+export default RootLayout;

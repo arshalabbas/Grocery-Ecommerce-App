@@ -1,5 +1,4 @@
 import {
-  Text,
   Pressable,
   PressableProps,
   StyleProp,
@@ -9,6 +8,7 @@ import {
 import { cva, VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 import Animated, {
+  BounceIn,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
@@ -47,7 +47,12 @@ const Button = ({ title, variant, containerStyles, ...props }: Props) => {
       {...props}
       style={[animatedStyles, containerStyles]}
     >
-      <Text className={cn(buttonTextStyles({ variant }))}>{title}</Text>
+      <Animated.Text
+        entering={BounceIn}
+        className={cn(buttonTextStyles({ variant }))}
+      >
+        {title}
+      </Animated.Text>
     </AnimatedPressable>
   );
 };
@@ -82,7 +87,7 @@ const buttonTextStyles = cva(
   {
     variants: {
       variant: {
-        "solid-primary": "text-secondary",
+        "solid-primary": "text-white",
         "solid-secondary": "text-white",
         "outline-primary": "text-primary",
         "outline-secondary": "text-secondary",

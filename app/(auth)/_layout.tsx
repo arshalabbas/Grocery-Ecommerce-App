@@ -9,6 +9,10 @@ const AuthLayout = () => {
     >
       <Stack.Screen name="welcome" />
       <Stack.Screen name="login" />
+      <Stack.Screen
+        name="verification"
+        options={{ presentation: "transparentModal" }}
+      />
     </Stack>
   );
 };

@@ -1,27 +1,27 @@
 import images from "./images";
+import colors from "./colors";
+import icons from "./icons";
 
 const onboarding = [
   {
     id: 1,
-    title: "The perfect ride is just a tap away!",
+    title: "Freshness delivered, straight to you!",
     description:
-      "Your journey begins with Ryde. Find your ideal ride effortlessly.",
+      "Experience the finest selection of fresh groceries at your fingertips.",
     image: images.onbaording1,
   },
   {
     id: 2,
-    title: "The perfect ride is just a tap away!",
-    description:
-      "Your journey begins with Ryde. Find your ideal ride effortlessly.",
+    title: "Effortless shopping, every time!",
+    description: "Shop with ease and convenience, from your cart to your door.",
     image: images.onbaording2,
   },
   {
     id: 3,
-    title: "The perfect ride is just a tap away!",
-    description:
-      "Your journey begins with Ryde. Find your ideal ride effortlessly.",
+    title: "Free delivery, every time!",
+    description: "No extra charges—get your groceries delivered for free.",
     image: images.onbaording3,
   },
 ];
 
-export { images, onboarding };
+export { images, onboarding, colors, icons };
