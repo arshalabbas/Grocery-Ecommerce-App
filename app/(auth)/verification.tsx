@@ -6,10 +6,31 @@ import { images } from "@/constants";
 import Button from "@/components/ui/Button";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import z from "zod";
+import { StatusBar } from "expo-status-bar";
+import { useEffect, useState } from "react";
+import Animated, { BounceIn, BounceOut } from "react-native-reanimated";
+import { formatTime } from "@/lib/utils";
+import { useMutation } from "@tanstack/react-query";
+import { validateCode } from "@/lib/api/login.api";
+import { useAuth } from "@/stores/useAuthStore";
 
 const Verification = () => {
-  const { phone } = useLocalSearchParams();
+  const { phone } = useLocalSearchParams<{ phone: string }>();
+  const [timer, setTimer] = useState(30 * 1000);
+  const signIn = useAuth((state) => state.signIn);
+
+  useEffect(() => {
+    const timerInterval = setInterval(() => {
+      if (timer > 0) {
+        setTimer(timer - 1000);
+      } else {
+        clearInterval(timerInterval);
+      }
+    }, 1000);
+
+    return () => clearInterval(timerInterval);
+  });
 
   const {
     handleSubmit,
@@ -22,18 +43,39 @@ const Verification = () => {
     resolver: zodResolver(
       z.object({
         code: z.string().min(4, "Code should be 4 digits"),
+        // TODO: Regex validation
       }),
     ),
   });
 
+  const validateCodeMutation = useMutation({
+    mutationFn: validateCode,
+  });
+
   const onSubmit = ({ code }: { code: string }) => {
-    // TODO: Verify OTP and navigate to dashboard
+    // FIX IT: Verify OTP and navigate to onboarding
+    validateCodeMutation.mutate(
+      { phone, code },
+      {
+        onSuccess: (data) => {
+          console.log(data);
+          if (data.token) {
+            signIn(data.token);
+          }
+          // TODO: Navigate to onboarding screen
+        },
+        onError: (error) => {
+          console.log(error);
+        },
+      },
+    );
     console.log("CODE", code, "PHONE", phone);
   };
 
   const resendCode = () => {
     // TODO: Request new OTP
     console.log("Resend code");
+    setTimer(30 * 1000);
   };
 
   return (
@@ -65,9 +107,23 @@ const Verification = () => {
             )}
           />
 
-          <TouchableOpacity className="p-2" onPress={resendCode}>
-            <Text>Resend OTP</Text>
-          </TouchableOpacity>
+          {timer > 0 ? (
+            <View className="p-2">
+              <Animated.Text entering={BounceIn} className="font-pmedium">
+                {formatTime(timer)}
+              </Animated.Text>
+            </View>
+          ) : (
+            <TouchableOpacity className="p-2" onPress={resendCode}>
+              <Animated.Text
+                entering={BounceIn}
+                className="font-pmedium"
+                exiting={BounceOut}
+              >
+                Resend OTP
+              </Animated.Text>
+            </TouchableOpacity>
+          )}
           <Button
             variant={"solid-secondary"}
             title="Verify"
@@ -76,6 +132,7 @@ const Verification = () => {
           />
         </View>
       </View>
+      <StatusBar style="light" />
     </View>
   );
 };

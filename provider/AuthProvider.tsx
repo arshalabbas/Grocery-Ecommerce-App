@@ -39,6 +39,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     if (!token) {
       router.replace("/(auth)/welcome");
+    } else {
+      router.replace("/(tabs)/home");
     }
   }, [token, isLoading, router, rootNavigationState?.key]);
 

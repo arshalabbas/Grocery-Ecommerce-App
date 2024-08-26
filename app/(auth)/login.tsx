@@ -8,6 +8,9 @@ import { ScrollView, Text, View } from "react-native";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
+import { useMutation } from "@tanstack/react-query";
+import { requestVerificationCode } from "@/lib/api/login.api";
+import Loading from "@/components/misc/Loading";
 const Login = () => {
   const router = useRouter();
   const {
@@ -18,6 +21,7 @@ const Login = () => {
     resolver: zodResolver(
       z.object({
         phone: z.string().length(10, "Enter valid phone number."),
+        // TODO: Regex validation
       }),
     ),
     defaultValues: {
@@ -25,9 +29,25 @@ const Login = () => {
     },
   });
 
+  const requestCodeMutation = useMutation({
+    mutationFn: requestVerificationCode,
+  });
+
   const onSubmit = ({ phone }: { phone: string }) => {
-    // TODO: Request OTP
-    router.push({ pathname: "/(auth)/verification", params: { phone } });
+    // FIX IT: Request OTP
+    requestCodeMutation.mutate(
+      { phone },
+      {
+        onSuccess: (data) => {
+          console.log(data);
+
+          router.push({
+            pathname: "/(auth)/verification",
+            params: { phone, time: data.time ?? null },
+          });
+        },
+      },
+    );
   };
 
   return (
@@ -87,6 +107,7 @@ const Login = () => {
           containerStyles={{ marginTop: 70 }}
         />
       </View>
+      <Loading isVisible={requestCodeMutation.isPending} />
       <StatusBar style="dark" />
     </ScrollView>
   );

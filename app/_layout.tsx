@@ -2,6 +2,7 @@ import { SplashScreen, Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import { useEffect } from "react";
 import AuthProvider from "@/provider/AuthProvider";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const RootLayout = () => {
   const [fontsLoaded, error] = useFonts({
@@ -27,14 +28,18 @@ const RootLayout = () => {
     return null;
   }
 
+  const queryClient = new QueryClient();
+
   return (
-    <AuthProvider>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="index" />
-        <Stack.Screen name="(auth)" />
-        <Stack.Screen name="(tabs)" />
-      </Stack>
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="index" />
+          <Stack.Screen name="(auth)" />
+          <Stack.Screen name="(tabs)" />
+        </Stack>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 };
 
