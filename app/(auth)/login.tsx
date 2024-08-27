@@ -11,7 +11,11 @@ import z from "zod";
 import { useMutation } from "@tanstack/react-query";
 import { requestVerificationCode } from "@/lib/api/login.api";
 import Loading from "@/components/misc/Loading";
+import { useState } from "react";
+import Animated from "react-native-reanimated";
+import { QuickShake } from "@/lib/animations";
 const Login = () => {
+  const [error, setError] = useState("");
   const router = useRouter();
   const {
     handleSubmit,
@@ -34,17 +38,30 @@ const Login = () => {
   });
 
   const onSubmit = ({ phone }: { phone: string }) => {
-    // FIX IT: Request OTP
+    setError("");
     requestCodeMutation.mutate(
       { phone },
       {
         onSuccess: (data) => {
-          console.log(data);
+          console.log(data); // REVIEW: Dont remove this
+          const otpCreatedTime = data.created_time!;
+          const now = Date.now();
+
+          if (now - otpCreatedTime > 600000) {
+            setError(data.warning!);
+            return;
+          }
 
           router.push({
             pathname: "/(auth)/verification",
-            params: { phone, time: data.time ?? null },
+            params: { phone, time: data.time },
           });
+        },
+        onError: (error) => {
+          console.log(error);
+          if (error.status === 400) {
+            setError(error.data.warning);
+          }
         },
       },
     );
@@ -67,6 +84,15 @@ const Login = () => {
         <Text className="w-4/5 font-pbold text-2xl">
           Get your Groceries with us!
         </Text>
+        {error !== "" && (
+          <Animated.Text
+            entering={QuickShake}
+            // exiting={BounceOut}
+            className="mt-5 font-pmedium text-danger"
+          >
+            {error}
+          </Animated.Text>
+        )}
         <View className="w-full items-center">
           <Controller
             control={control}

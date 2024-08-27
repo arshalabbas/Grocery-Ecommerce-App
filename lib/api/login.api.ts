@@ -4,6 +4,8 @@ export const requestVerificationCode = ({ phone }: { phone: string }) => {
   return new Promise<{
     otp: string;
     time?: number;
+    created_time?: number;
+    warning?: string; // TODO: Remove this
   }>((resolve, reject) => {
     api
       .post("/customer/verification-code", {

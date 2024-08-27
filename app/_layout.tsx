@@ -3,6 +3,13 @@ import { useFonts } from "expo-font";
 import { useEffect } from "react";
 import AuthProvider from "@/provider/AuthProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import AxiosProvider from "@/provider/AxiosProvider";
+
+declare module "@tanstack/react-query" {
+  interface Register {
+    defaultError: any;
+  }
+}
 
 const RootLayout = () => {
   const [fontsLoaded, error] = useFonts({
@@ -31,15 +38,18 @@ const RootLayout = () => {
   const queryClient = new QueryClient();
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="index" />
-          <Stack.Screen name="(auth)" />
-          <Stack.Screen name="(tabs)" />
-        </Stack>
-      </AuthProvider>
-    </QueryClientProvider>
+    <AxiosProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="index" />
+            <Stack.Screen name="(auth)" />
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="onboarding" />
+          </Stack>
+        </AuthProvider>
+      </QueryClientProvider>
+    </AxiosProvider>
   );
 };
 

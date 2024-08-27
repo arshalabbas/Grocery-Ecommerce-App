@@ -8,29 +8,56 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useState } from "react";
-import Animated, { BounceIn, BounceOut } from "react-native-reanimated";
+import { useEffect, useRef, useState } from "react";
+import Animated, {
+  BounceIn,
+  BounceOut,
+  LinearTransition,
+} from "react-native-reanimated";
 import { formatTime } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
-import { validateCode } from "@/lib/api/login.api";
+import { requestVerificationCode, validateCode } from "@/lib/api/login.api";
 import { useAuth } from "@/stores/useAuthStore";
+import Loading from "@/components/misc/Loading";
+import { QuickShake } from "@/lib/animations";
 
 const Verification = () => {
-  const { phone } = useLocalSearchParams<{ phone: string }>();
-  const [timer, setTimer] = useState(30 * 1000);
+  const [error, setError] = useState("");
+  const { phone, time } = useLocalSearchParams<{
+    phone: string;
+    time: string;
+  }>();
+  const [timer, setTimer] = useState(0);
   const signIn = useAuth((state) => state.signIn);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const startTimer = (initialTime: number) => {
+    setTimer(initialTime);
+
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+
+    timerRef.current = setInterval(() => {
+      setTimer((prevTimer) => {
+        if (prevTimer > 0) {
+          return prevTimer - 1000;
+        } else {
+          clearInterval(timerRef.current!);
+          return 0;
+        }
+      });
+    }, 1000);
+  };
 
   useEffect(() => {
-    const timerInterval = setInterval(() => {
-      if (timer > 0) {
-        setTimer(timer - 1000);
-      } else {
-        clearInterval(timerInterval);
+    startTimer(+time);
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
       }
-    }, 1000);
-
-    return () => clearInterval(timerInterval);
-  });
+    };
+  }, [time]);
 
   const {
     handleSubmit,
@@ -52,20 +79,25 @@ const Verification = () => {
     mutationFn: validateCode,
   });
 
+  const requestCodeMutation = useMutation({
+    mutationFn: requestVerificationCode,
+  });
+
   const onSubmit = ({ code }: { code: string }) => {
-    // FIX IT: Verify OTP and navigate to onboarding
+    setError("");
     validateCodeMutation.mutate(
       { phone, code },
       {
         onSuccess: (data) => {
-          console.log(data);
           if (data.token) {
             signIn(data.token);
           }
-          // TODO: Navigate to onboarding screen
         },
         onError: (error) => {
-          console.log(error);
+          if (error.status === 400) {
+            console.log(error.data);
+            setError(error.data.error);
+          }
         },
       },
     );
@@ -73,9 +105,22 @@ const Verification = () => {
   };
 
   const resendCode = () => {
-    // TODO: Request new OTP
-    console.log("Resend code");
-    setTimer(30 * 1000);
+    setError("");
+    requestCodeMutation.mutate(
+      { phone },
+      {
+        onSuccess: (data) => {
+          startTimer(data.time!);
+          console.log(data); // Dont remove this
+        },
+        onError: (error) => {
+          if (error.status === 400) {
+            console.log(error.data);
+            setError(error.data.warning);
+          }
+        },
+      },
+    );
   };
 
   return (
@@ -87,8 +132,17 @@ const Verification = () => {
           className="aspect-[16/8] w-full"
           contentFit="cover"
         />
-        <View className="items-center p-5">
+        <Animated.View className="items-center p-5" layout={LinearTransition}>
           <Text className="font-pbold text-2xl">OTP Verfication</Text>
+          {error !== "" && (
+            <Animated.Text
+              entering={QuickShake}
+              // exiting={BounceOut}
+              className="mt-5 font-pmedium text-danger"
+            >
+              {error}
+            </Animated.Text>
+          )}
           <Controller
             control={control}
             name="code"
@@ -130,8 +184,9 @@ const Verification = () => {
             containerStyles={{ marginTop: 20 }}
             onPress={handleSubmit(onSubmit)}
           />
-        </View>
+        </Animated.View>
       </View>
+      <Loading isVisible={validateCodeMutation.isPending} />
       <StatusBar style="light" />
     </View>
   );

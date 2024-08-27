@@ -21,8 +21,8 @@ const InputField = ({ label, containerStyle, error, ...props }: Props) => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <Text className="font-pmedium text-lg">{label}</Text>
-      <View className="w-full flex-row rounded-xl border-[.5px] border-secondary-muted/50 bg-white p-4">
-        <TextInput className="w-full text-lg font-semibold" {...props} />
+      <View className="w-full flex-row rounded-xl border-[.5px] border-secondary-muted/50 bg-white px-4">
+        <TextInput className="w-full py-4 text-lg font-semibold" {...props} />
       </View>
       {error && (
         <Text className="mt-1 font-pmedium text-sm text-danger">{error}</Text>
