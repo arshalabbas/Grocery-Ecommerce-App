@@ -1,36 +1,54 @@
-import { logoutUser } from "@/lib/api/user.api";
-import { useAuth } from "@/stores/useAuthStore";
-import { useUser } from "@/stores/useUserStore";
-import { useMutation } from "@tanstack/react-query";
-import { StatusBar } from "expo-status-bar";
-import { Text, TouchableOpacity, View } from "react-native";
+import { View, Text } from "react-native";
+import React from "react";
+import { Tabs } from "expo-router";
+import { Image } from "expo-image";
+import { icons } from "@/constants";
+import ActionButton from "@/components/ui/ActionButton";
 
-export default function Index() {
-  const { user, clearUser } = useUser();
-  const signOut = useAuth((state) => state.signOut);
-
-  // Logout Mock
-  const logoutMutation = useMutation({
-    mutationFn: logoutUser,
-    onSuccess: (data) => {
-      console.log(data);
-      clearUser();
-      signOut();
-    },
-    onError: (error) => {
-      console.log(error.data);
-    },
-  });
-
+const Home = () => {
   return (
-    <View className="flex-1 items-center justify-center">
-      <Text className="m-3 p-4 font-pblack text-xl">
-        {user.name} - {user.phone}
-      </Text>
-      <TouchableOpacity onPress={() => logoutMutation.mutate()}>
-        <Text className="font-pmedium text-lg text-danger">Logout</Text>
-      </TouchableOpacity>
-      <StatusBar style="dark" />
+    <View>
+      <Tabs.Screen
+        options={{
+          headerTitle: "",
+          headerStyle: {
+            borderBottomWidth: 0.5,
+            elevation: 0,
+            height: 120,
+          },
+          headerLeft: () => (
+            <View>
+              <Text className="font-psemibold">Delivery Address</Text>
+              <View className="flex-row items-center">
+                <Text
+                  className="font-pregular text-secondary-muted"
+                  style={{
+                    includeFontPadding: false,
+                    textAlignVertical: "center",
+                  }}
+                >
+                  Sulthan Bathery
+                </Text>
+                <Image
+                  source={icons.location}
+                  className="ml-1 aspect-square h-4"
+                  contentFit="contain"
+                />
+              </View>
+            </View>
+          ),
+          headerLeftContainerStyle: {
+            marginLeft: 20,
+          },
+          headerRight: () => <ActionButton iconLeft={icons.cart} title="20" />,
+          headerRightContainerStyle: {
+            marginRight: 20,
+          },
+        }}
+      />
+      <Text>Home</Text>
     </View>
   );
-}
+};
+
+export default Home;

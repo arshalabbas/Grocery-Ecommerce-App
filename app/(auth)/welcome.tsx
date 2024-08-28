@@ -48,10 +48,10 @@ const Welcome = () => {
               contentFit="contain"
             />
             <View className="mt-10 flex w-full items-center justify-center">
-              <Text className="mx-10 text-center text-3xl font-bold text-black">
+              <Text className="mx-10 text-center font-pbold text-3xl text-secondary">
                 {item.title}
               </Text>
-              <Text className="font-JakartaSemiBold mx-10 mt-3 text-center text-secondary-muted">
+              <Text className="mx-10 mt-2 text-center font-pmedium text-secondary-muted">
                 {item.description}
               </Text>
             </View>

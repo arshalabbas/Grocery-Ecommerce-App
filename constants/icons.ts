@@ -1,5 +1,9 @@
 import phone from "@/assets/icons/phone.svg";
 import india from "@/assets/icons/india.png";
+import location from "@/assets/icons/location.svg";
+import cart from "@/assets/icons/cart.svg";
+import plus from "@/assets/icons/plus.svg";
+import search from "@/assets/icons/search.svg";
 
 // TabBar Icons
 // Active
@@ -30,4 +34,15 @@ const profile = {
   inactive: profileInactive,
 };
 
-export default { phone, india, home, wishlist, orders, profile };
+export default {
+  phone,
+  india,
+  home,
+  wishlist,
+  orders,
+  profile,
+  location,
+  cart,
+  plus,
+  search,
+};

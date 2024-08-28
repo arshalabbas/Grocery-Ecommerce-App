@@ -42,13 +42,28 @@ const TabsLayout = () => {
           elevation: 0,
           borderTopWidth: 0.5,
         },
-        unmountOnBlur: false,
+        headerStyle: {
+          borderBottomWidth: 0.5,
+          elevation: 0,
+        },
+        headerTitleAlign: "left",
+        headerTitleStyle: {
+          color: colors.secondary.DEFAULT,
+          fontFamily: "Poppins-SemiBold",
+          fontSize: 22,
+          includeFontPadding: false,
+          textAlignVertical: "center",
+        },
+        headerTitleContainerStyle: {
+          marginLeft: 20,
+        },
       }}
     >
       {/* Home Tab */}
       <Tabs.Screen
         name="home/index"
         options={{
+          title: "Home",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               label="Home"
@@ -63,6 +78,7 @@ const TabsLayout = () => {
       <Tabs.Screen
         name="wishlist/index"
         options={{
+          title: "Wishlist",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               label="Wishlist"
@@ -77,6 +93,7 @@ const TabsLayout = () => {
       <Tabs.Screen
         name="orders/index"
         options={{
+          title: "Orders",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               label="Orders"
@@ -91,6 +108,7 @@ const TabsLayout = () => {
       <Tabs.Screen
         name="profile/index"
         options={{
+          title: "Profile",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               label="Profile"
