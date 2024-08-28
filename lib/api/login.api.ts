@@ -2,10 +2,10 @@ import api from "./axios";
 
 export const requestVerificationCode = ({ phone }: { phone: string }) => {
   return new Promise<{
-    otp: string;
+    otp: string; // REVIEW: This must be removed in the future
     time?: number;
     created_time?: number;
-    warning?: string; // TODO: Remove this
+    message: string;
   }>((resolve, reject) => {
     api
       .post("/customer/verification-code", {

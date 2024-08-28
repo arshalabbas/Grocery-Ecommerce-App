@@ -116,7 +116,7 @@ const Verification = () => {
         onError: (error) => {
           if (error.status === 400) {
             console.log(error.data);
-            setError(error.data.warning);
+            setError(error.data.message);
           }
         },
       },

@@ -48,7 +48,7 @@ const Login = () => {
           const now = Date.now();
 
           if (now - otpCreatedTime > 600000) {
-            setError(data.warning!);
+            setError(data.message);
             return;
           }
 
@@ -60,7 +60,7 @@ const Login = () => {
         onError: (error) => {
           console.log(error);
           if (error.status === 400) {
-            setError(error.data.warning);
+            setError(error.data.message);
           }
         },
       },
