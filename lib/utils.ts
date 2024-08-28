@@ -22,3 +22,25 @@ export const formatTime = (milliseconds: number) => {
 
   return formattedTime;
 };
+
+export const formatTimeInWords = (milliseconds: number) => {
+  const totalSeconds = Math.floor(milliseconds / 1000);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  let formattedTime = "";
+
+  if (hours > 0) {
+    formattedTime += `${hours} hour${hours > 1 ? "s" : ""}`;
+    if (minutes > 0) {
+      formattedTime += ` ${minutes} minute${minutes > 1 ? "s" : ""}`;
+    }
+  } else if (minutes > 0) {
+    formattedTime += `${minutes} minute${minutes > 1 ? "s" : ""}`;
+  } else {
+    formattedTime += `${seconds} second${seconds > 1 ? "s" : ""}`;
+  }
+
+  return formattedTime;
+};

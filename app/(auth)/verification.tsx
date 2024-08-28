@@ -20,6 +20,7 @@ import { requestVerificationCode, validateCode } from "@/lib/api/login.api";
 import { useAuth } from "@/stores/useAuthStore";
 import Loading from "@/components/misc/Loading";
 import { QuickShake } from "@/lib/animations";
+import * as Haptics from "expo-haptics";
 
 const Verification = () => {
   const [error, setError] = useState("");
@@ -62,6 +63,7 @@ const Verification = () => {
   const {
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm<{ code: string }>({
     defaultValues: {
@@ -97,6 +99,8 @@ const Verification = () => {
           if (error.status === 400) {
             console.log(error.data);
             setError(error.data.error);
+            reset();
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
           }
         },
       },
@@ -117,6 +121,7 @@ const Verification = () => {
           if (error.status === 400) {
             console.log(error.data);
             setError(error.data.message);
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
           }
         },
       },

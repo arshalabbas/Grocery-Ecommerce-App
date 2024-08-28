@@ -2,6 +2,7 @@ import { logoutUser } from "@/lib/api/user.api";
 import { useAuth } from "@/stores/useAuthStore";
 import { useUser } from "@/stores/useUserStore";
 import { useMutation } from "@tanstack/react-query";
+import { StatusBar } from "expo-status-bar";
 import { Text, TouchableOpacity, View } from "react-native";
 
 export default function Index() {
@@ -29,6 +30,7 @@ export default function Index() {
       <TouchableOpacity onPress={() => logoutMutation.mutate()}>
         <Text className="font-pmedium text-lg text-danger">Logout</Text>
       </TouchableOpacity>
+      <StatusBar style="dark" />
     </View>
   );
 }

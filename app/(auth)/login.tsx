@@ -14,6 +14,9 @@ import Loading from "@/components/misc/Loading";
 import { useState } from "react";
 import Animated from "react-native-reanimated";
 import { QuickShake } from "@/lib/animations";
+import * as Haptics from "expo-haptics";
+import { formatTimeInWords } from "@/lib/utils";
+
 const Login = () => {
   const [error, setError] = useState("");
   const router = useRouter();
@@ -48,7 +51,11 @@ const Login = () => {
           const now = Date.now();
 
           if (now - otpCreatedTime > 600000) {
-            setError(data.message);
+            setError(
+              "Your OTP limit exceeded. Try again after " +
+                formatTimeInWords(data.time!),
+            );
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
             return;
           }
 
@@ -61,6 +68,7 @@ const Login = () => {
           console.log(error);
           if (error.status === 400) {
             setError(error.data.message);
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
           }
         },
       },
@@ -87,8 +95,7 @@ const Login = () => {
         {error !== "" && (
           <Animated.Text
             entering={QuickShake}
-            // exiting={BounceOut}
-            className="mt-5 font-pmedium text-danger"
+            className="mt-2 font-pmedium text-danger"
           >
             {error}
           </Animated.Text>
@@ -104,7 +111,7 @@ const Login = () => {
                 onBlur={onBlur}
                 label="Phone"
                 placeholder="Enter your phone"
-                containerStyle="mt-5"
+                containerStyle="mt-2"
                 error={errors.phone && errors.phone.message}
               />
             )}
