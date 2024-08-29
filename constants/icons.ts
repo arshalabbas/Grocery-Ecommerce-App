@@ -4,6 +4,8 @@ import location from "@/assets/icons/location.svg";
 import cart from "@/assets/icons/cart.svg";
 import plus from "@/assets/icons/plus.svg";
 import search from "@/assets/icons/search.svg";
+import angleDown from "@/assets/icons/angle-down.svg";
+import gps from "@/assets/icons/gps.svg";
 
 // TabBar Icons
 // Active
@@ -45,4 +47,6 @@ export default {
   cart,
   plus,
   search,
+  angleDown,
+  gps,
 };
