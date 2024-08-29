@@ -12,10 +12,8 @@ import { useMutation } from "@tanstack/react-query";
 import { requestVerificationCode } from "@/lib/api/login.api";
 import Loading from "@/components/misc/Loading";
 import { useState } from "react";
-import Animated from "react-native-reanimated";
-import { QuickShake } from "@/lib/animations";
-import * as Haptics from "expo-haptics";
 import { formatTimeInWords } from "@/lib/utils";
+import ShakyError from "@/components/misc/ShakyError";
 
 const Login = () => {
   const [error, setError] = useState("");
@@ -55,7 +53,6 @@ const Login = () => {
               "Your OTP limit exceeded. Try again after " +
                 formatTimeInWords(data.time!),
             );
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
             return;
           }
 
@@ -68,7 +65,6 @@ const Login = () => {
           console.log(error);
           if (error.status === 400) {
             setError(error.data.message);
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
           }
         },
       },
@@ -92,14 +88,7 @@ const Login = () => {
         <Text className="w-4/5 font-pbold text-2xl">
           Get your Groceries with us!
         </Text>
-        {error !== "" && (
-          <Animated.Text
-            entering={QuickShake}
-            className="mt-2 font-pmedium text-danger"
-          >
-            {error}
-          </Animated.Text>
-        )}
+        {error !== "" && <ShakyError>{error}</ShakyError>}
         <View className="w-full items-center">
           <Controller
             control={control}

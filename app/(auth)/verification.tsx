@@ -19,8 +19,8 @@ import { useMutation } from "@tanstack/react-query";
 import { requestVerificationCode, validateCode } from "@/lib/api/login.api";
 import { useAuth } from "@/stores/useAuthStore";
 import Loading from "@/components/misc/Loading";
-import { QuickShake } from "@/lib/animations";
 import * as Haptics from "expo-haptics";
+import ShakyError from "@/components/misc/ShakyError";
 
 const Verification = () => {
   const [error, setError] = useState("");
@@ -100,7 +100,6 @@ const Verification = () => {
             console.log(error.data);
             setError(error.data.error);
             reset();
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
           }
         },
       },
@@ -139,15 +138,7 @@ const Verification = () => {
         />
         <Animated.View className="items-center p-5" layout={LinearTransition}>
           <Text className="font-pbold text-2xl">OTP Verfication</Text>
-          {error !== "" && (
-            <Animated.Text
-              entering={QuickShake}
-              // exiting={BounceOut}
-              className="mt-5 font-pmedium text-danger"
-            >
-              {error}
-            </Animated.Text>
-          )}
+          {error !== "" && <ShakyError>{error}</ShakyError>}
           <Controller
             control={control}
             name="code"

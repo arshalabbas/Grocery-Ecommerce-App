@@ -46,13 +46,6 @@ const RootLayout = () => {
             <Stack.Screen name="(auth)" />
             <Stack.Screen name="(tabs)" />
             <Stack.Screen name="onboarding" />
-            <Stack.Screen
-              name="location"
-              options={{
-                animation: "slide_from_bottom",
-                presentation: "modal",
-              }}
-            />
           </Stack>
         </AuthProvider>
       </QueryClientProvider>

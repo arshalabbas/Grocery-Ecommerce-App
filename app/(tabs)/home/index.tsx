@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 import React, { useEffect } from "react";
-import { Tabs, router } from "expo-router";
+import { Stack, router } from "expo-router";
 import * as Location from "expo-location";
 import { useUser } from "@/stores/useUserStore";
 import Header from "@/components/home/Header";
@@ -16,7 +16,7 @@ const Home = () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
         // alert("Access denied");
-        router.push("/location");
+        router.push("/(tabs)/home/location");
         return;
       }
 
@@ -37,7 +37,7 @@ const Home = () => {
 
   return (
     <View>
-      <Tabs.Screen
+      <Stack.Screen
         options={{
           header: () => <Header />,
         }}

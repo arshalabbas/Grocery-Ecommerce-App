@@ -1,9 +1,9 @@
 import { Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Image } from "expo-image";
 import { icons } from "@/constants";
-import { useRouter } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import Button from "@/components/ui/Button";
 import InputField from "@/components/form/InputFeld";
@@ -15,11 +15,14 @@ import { fetchLocationfromPin } from "@/lib/api/location.api";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Loading from "@/components/misc/Loading";
 
 const LocationScreen = () => {
   const { postalCode } = useUser((state) => state.location);
   const setLocation = useUser((state) => state.setLocation);
+
   const router = useRouter();
+  const navigation = useNavigation();
 
   const locationFromPinMutation = useMutation({
     mutationFn: fetchLocationfromPin,
@@ -35,7 +38,7 @@ const LocationScreen = () => {
   const fetchLocation = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
-      alert("Access denied");
+      alert("Access denied"); // TODO: Handle the alert
       return;
     }
 
@@ -71,6 +74,16 @@ const LocationScreen = () => {
       },
     });
   };
+
+  useEffect(() => {
+    navigation.addListener("beforeRemove", (e) => {
+      e.preventDefault();
+      if (postalCode !== "") {
+        navigation.dispatch(e.data.action);
+      }
+      return;
+    });
+  }, [navigation, postalCode]);
 
   return (
     <SafeAreaView className="flex-1 bg-background">
@@ -125,6 +138,7 @@ const LocationScreen = () => {
           <Text className="font-pbold text-lg">Saved Addresses</Text>
         </View>
       </View>
+      <Loading isVisible={locationFromPinMutation.isPending} />
       <StatusBar style="dark" backgroundColor="white" />
     </SafeAreaView>
   );

@@ -17,7 +17,7 @@ const Header = () => {
         <TouchableOpacity
           className="w-1/2 flex-row items-center"
           activeOpacity={0.7}
-          onPress={() => router.push("/location")}
+          onPress={() => router.push("/(tabs)/home/location")}
         >
           <Image
             source={icons.location}

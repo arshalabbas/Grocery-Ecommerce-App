@@ -61,7 +61,7 @@ const TabsLayout = () => {
     >
       {/* Home Tab */}
       <Tabs.Screen
-        name="home/index"
+        name="home"
         options={{
           title: "Home",
           tabBarIcon: ({ color, focused }) => (
@@ -72,6 +72,7 @@ const TabsLayout = () => {
               color={color}
             />
           ),
+          headerShown: false,
         }}
       />
       {/* Wishlist Tab */}
