@@ -76,7 +76,7 @@ const Button = ({ title, variant, icon, containerStyles, ...props }: Props) => {
 export default Button;
 
 const buttonContainerStyles = cva(
-  "flex-row w-full items-center justify-center rounded-xl p-3 shadow-md shadow-neutral-400/70", // Base styles
+  "flex-row w-full items-center justify-center p-3 shadow-md shadow-neutral-400/70", // Base styles
   {
     variants: {
       variant: {

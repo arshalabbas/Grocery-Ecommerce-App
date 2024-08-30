@@ -8,6 +8,7 @@ import angleDown from "@/assets/icons/angle-down.svg";
 import gps from "@/assets/icons/gps.svg";
 import bag from "@/assets/icons/bag.svg";
 import arrowLeft from "@/assets/icons/arrow-left.svg";
+import info from "@/assets/icons/info.svg";
 
 // Action Icons
 // Active
@@ -61,4 +62,5 @@ export default {
   gps,
   bag,
   heart,
+  info,
 };

@@ -1,4 +1,4 @@
-import { icons } from "@/constants";
+import { colors, icons } from "@/constants";
 import { Image, ImageSource } from "expo-image";
 import { useRouter } from "expo-router";
 import { View, Text, StatusBar, TouchableOpacity } from "react-native";
@@ -43,11 +43,12 @@ const ScreenHeader = ({
           </Text>
         </View>
         {rightIcon && (
-          <TouchableOpacity className="p-[20px]">
+          <TouchableOpacity className="p-[20px]" onPress={onRightPress}>
             <Image
-              source={rightIcon}
               className="aspect-square w-5"
+              source={rightIcon}
               contentFit="contain"
+              tintColor={colors.secondary.DEFAULT}
             />
           </TouchableOpacity>
         )}

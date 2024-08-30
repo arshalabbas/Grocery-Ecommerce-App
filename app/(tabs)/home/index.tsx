@@ -1,4 +1,4 @@
-import { View, Text, FlatList } from "react-native";
+import { View, Text, FlatList, RefreshControl } from "react-native";
 import React, { useEffect } from "react";
 import { Stack, router } from "expo-router";
 import * as Location from "expo-location";
@@ -15,10 +15,9 @@ const Home = () => {
   const userLocation = useUser((state) => state.location);
   const setLocation = useUser((state) => state.setLocation);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch, isRefetching } = useQuery({
     queryKey: ["products", userLocation.postalCode],
-    queryFn: () =>
-      getProducts({ query: "pincode", value: userLocation.postalCode }),
+    queryFn: () => getProducts({ pincode: userLocation.postalCode }),
   });
 
   useEffect(() => {
@@ -54,15 +53,19 @@ const Home = () => {
       />
       <FlatList
         className="w-full flex-1"
+        refreshControl={
+          <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
+        }
         ListHeaderComponent={<ListHeader />}
         ListHeaderComponentStyle={{ marginBottom: 20 }}
-        contentContainerStyle={{ padding: 20 }}
+        contentContainerStyle={{ padding: 12 }}
         keyExtractor={(item) => item.id}
         ListEmptyComponent={() => <Text>Empty List</Text>}
         data={data}
         numColumns={2}
         renderItem={({ index, item }) => (
           <ProductCard
+            id={item.id}
             title={item.title}
             image={item.image}
             unit={item.unit}

@@ -79,13 +79,11 @@ const AxiosProvider = ({ children }: { children: ReactNode }) => {
               console.log("Refresh token is expired", tokenParts.exp, now);
               clearUser();
               signOut();
-              router.replace("/(auth)/welcome");
             }
           } else {
             console.log("Refresh token not available.");
             clearUser();
             signOut();
-            router.replace("/(auth)/welcome");
           }
         }
 

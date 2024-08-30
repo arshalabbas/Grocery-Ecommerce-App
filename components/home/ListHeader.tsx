@@ -2,6 +2,7 @@ import { Image } from "expo-image";
 import { View } from "react-native";
 import InputField from "../form/InputFeld";
 import dummy from "@/constants/dummy";
+import MockSearchButton from "../misc/MockSearchButton";
 
 const ListHeader = () => {
   return (
@@ -12,7 +13,7 @@ const ListHeader = () => {
         source={dummy.banner}
         contentFit="cover"
       />
-      <InputField label="" placeholder="search" />
+      <MockSearchButton />
     </View>
   );
 };
