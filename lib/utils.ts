@@ -5,6 +5,7 @@ export const cn = (...input: ClassValue[]) => {
   return twMerge(clsx(input));
 };
 
+// format time from the milliseconds
 export const formatTime = (milliseconds: number) => {
   const totalSeconds = Math.floor(milliseconds / 1000);
   const hours = Math.floor(totalSeconds / 3600);
@@ -23,6 +24,7 @@ export const formatTime = (milliseconds: number) => {
   return formattedTime;
 };
 
+// format the time into words from milliseconds
 export const formatTimeInWords = (milliseconds: number) => {
   const totalSeconds = Math.floor(milliseconds / 1000);
   const hours = Math.floor(totalSeconds / 3600);

@@ -23,19 +23,21 @@ interface Props {
 const IconRadioButton = ({ icon, value }: Props) => {
   const [active, setActive] = useState(false);
 
-  const rotationAnimation = useSharedValue(0);
+  const scale = useSharedValue(1);
 
-  rotationAnimation.value = withRepeat(
-    withSequence(
-      withTiming(25, { duration: 150 }),
-      withTiming(0, { duration: 150 }),
-    ),
-    4,
-  );
+  if (active) {
+    scale.value = withRepeat(
+      withSequence(
+        withTiming(1.1, { duration: 150 }),
+        withTiming(1, { duration: 150 }),
+      ),
+      2,
+    );
+  }
 
   const animatedStyle = useAnimatedStyle(
     () => ({
-      transform: [{ rotate: `${rotationAnimation.value}deg` }],
+      transform: [{ scale: scale.value }],
     }),
     [active],
   );

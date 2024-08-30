@@ -30,6 +30,18 @@ export interface PostOfficeData {
   Pincode: string;
 }
 
+export interface Category {
+  id: string;
+  title: string;
+}
+
+export interface SubCategory {
+  id: string;
+  title: string;
+  image: string;
+  category: Category;
+}
+
 export interface ProductData {
   id: string;
   image: ImageSource;
@@ -37,13 +49,5 @@ export interface ProductData {
   price: number;
   unit: string;
   stock: number;
-  sub_category: {
-    id: string;
-    title: string;
-    image: string;
-    category: {
-      id: string;
-      title: string;
-    };
-  };
+  sub_category: SubCategory;
 }

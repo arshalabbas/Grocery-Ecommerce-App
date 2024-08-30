@@ -53,10 +53,10 @@ const ProductScreen = () => {
                 <View className="mt-2 flex-row items-center justify-between">
                   <View>
                     <Text className="font-pregular text-secondary-muted">
-                      1{data?.unit}
+                      1 {data?.unit}
                     </Text>
                     <Text className="font-pbold text-lg text-secondary">
-                      ₹{data?.price}
+                      ₹ {data?.price}
                     </Text>
                   </View>
                   <ActionButton iconLeft={icons.plus} title="Add" />

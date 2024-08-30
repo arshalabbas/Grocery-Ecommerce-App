@@ -10,6 +10,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { Link } from "expo-router";
+import { memo } from "react";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -86,4 +87,4 @@ const ProductCard = ({ id, image, title, unit, price, badgeText }: Props) => {
   );
 };
 
-export default ProductCard;
+export default memo(ProductCard);

@@ -2,7 +2,6 @@ import { PostOfficeData } from "@/types";
 import axios from "axios";
 
 export const fetchLocationfromPin = (pinCode: string) => {
-  console.log(pinCode);
   return new Promise<PostOfficeData>((resolve, reject) => {
     axios
       .get(`https://api.postalpincode.in/pincode/${pinCode}`)
