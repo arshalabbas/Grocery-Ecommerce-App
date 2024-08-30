@@ -64,14 +64,14 @@ const ActionButton = ({
         style={{ includeFontPadding: false }}
       >
         {title}
-        {iconRight && (
-          <Image
-            source={iconRight}
-            className="ml-1 aspect-square w-4"
-            contentFit="contain"
-          />
-        )}
       </Text>
+      {iconRight && (
+        <Image
+          source={iconRight}
+          className="ml-1 aspect-square w-4"
+          contentFit="contain"
+        />
+      )}
     </AnimatedPressable>
   );
 };

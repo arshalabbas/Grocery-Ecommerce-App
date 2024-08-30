@@ -1,5 +1,6 @@
 import React from "react";
 import { Stack } from "expo-router";
+import ScreenHeader from "@/components/ScreenHeader";
 
 const HomeLayout = () => {
   return (
@@ -11,6 +12,12 @@ const HomeLayout = () => {
           animation: "slide_from_bottom",
           presentation: "modal",
           headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="profile"
+        options={{
+          header: () => <ScreenHeader title="Profile" />,
         }}
       />
     </Stack>

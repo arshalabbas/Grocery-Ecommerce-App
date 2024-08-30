@@ -1,3 +1,5 @@
+import { ImageSource } from "expo-image";
+
 export interface User {
   id: string;
   phone: string;
@@ -26,4 +28,22 @@ export interface PostOfficeData {
   State: string;
   Country: string;
   Pincode: string;
+}
+
+export interface ProductData {
+  id: string;
+  image: ImageSource;
+  title: string;
+  price: number;
+  unit: string;
+  stock: number;
+  sub_category: {
+    id: string;
+    title: string;
+    image: string;
+    category: {
+      id: string;
+      title: string;
+    };
+  };
 }

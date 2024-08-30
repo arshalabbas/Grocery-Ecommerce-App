@@ -49,10 +49,11 @@ const Header = () => {
         <TouchableOpacity
           activeOpacity={0.7}
           className="aspect-square w-10 overflow-hidden rounded-full border border-primary"
+          onPress={() => router.push("/(tabs)/home/profile")}
         >
           <Image
             className="h-full w-full"
-            source={`https://api.dicebear.com/9.x/glass/svg?seed=${user.name.toLowerCase().replace(" ", "-")}`}
+            source={`https://api.dicebear.com/9.x/thumbs/svg?seed=${user.name.toLowerCase().replace(" ", "-")}&backgroundColor=transparent&shapeColor=f88c49`}
           />
         </TouchableOpacity>
       </View>
