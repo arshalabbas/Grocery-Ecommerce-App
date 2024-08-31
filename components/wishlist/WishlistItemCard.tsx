@@ -11,13 +11,21 @@ interface Props {
 const WishlistItemCard = ({ image, title, quantity, unit }: Props) => {
   return (
     <View className="mb-4 w-full rounded-lg bg-background px-3 py-5">
-      <View className="flex-row">
-        <Image source={image} className="aspect-square w-10 rounded-lg" />
+      <View className="flex-row space-x-5">
+        <Image
+          source={image}
+          className="aspect-square w-10 rounded-lg"
+          contentFit="contain"
+        />
         <View>
-          <Text className="font-pmedium text-secondary">{title}</Text>
-          <Text className="font-pregular text-xs text-secondary-muted">
-            {quantity} {unit}
-          </Text>
+          <View className="flex-1">
+            <Text className="font-pmedium text-secondary" numberOfLines={1}>
+              {title}
+            </Text>
+            <Text className="font-pregular text-xs text-secondary-muted">
+              {quantity} {unit}
+            </Text>
+          </View>
         </View>
       </View>
     </View>

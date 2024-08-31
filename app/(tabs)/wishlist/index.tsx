@@ -14,7 +14,7 @@ const WishList = () => {
   });
 
   return (
-    <View className="flex-1 p-5">
+    <View className="flex-1">
       <Tabs.Screen
         options={{
           headerRight: () => (
@@ -32,9 +32,11 @@ const WishList = () => {
             title={item.title}
             itemsLength={item.number_of_items}
             items={item.items}
+            totalPrice={item.total_price}
           />
         )}
         estimatedItemSize={250}
+        contentContainerStyle={{ paddingHorizontal: 15, paddingVertical: 8 }}
       />
     </View>
   );
