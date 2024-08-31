@@ -1,4 +1,4 @@
-import { View, Text, FlatList, RefreshControl } from "react-native";
+import { View, Text, RefreshControl, ActivityIndicator } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Stack, router } from "expo-router";
 import * as Location from "expo-location";
@@ -8,9 +8,11 @@ import { StatusBar } from "expo-status-bar";
 import ListHeader from "@/components/home/ListHeader";
 import { useQuery } from "@tanstack/react-query";
 import { getProducts, getSubCategories } from "@/lib/api/product.api";
-import Loading from "@/components/misc/Loading";
 import ProductCard from "@/components/ProductCard";
 import { fetchLocationfromPin } from "@/lib/api/location.api";
+import { FlashList } from "@shopify/flash-list";
+import { colors } from "@/constants";
+import HomeContentSkeleton from "@/components/skeletons/HomeContentSkeleton";
 
 const Home = () => {
   const userLocation = useUser((state) => state.location);
@@ -21,22 +23,30 @@ const Home = () => {
     title: string;
   }>({ id: "", title: "" });
 
-  const { data: location, isSuccess: isLocationSuccess } = useQuery({
+  const {
+    data: postLocation,
+    isSuccess: isLocationSuccess,
+    isLoading: isPostLocationLoading,
+  } = useQuery({
     queryKey: ["location", userLocation.postalCode],
     queryFn: () => fetchLocationfromPin(userLocation.postalCode),
   });
 
-  const { data: categories, isSuccess: isCategorySuccess } = useQuery({
+  const {
+    data: categories,
+    isSuccess: isCategorySuccess,
+    isLoading: isCategoriesLoading,
+  } = useQuery({
     queryKey: ["sub-categories"],
-    queryFn: () => getSubCategories({ district: location?.District }),
+    queryFn: () => getSubCategories({ district: postLocation?.District }),
     enabled: isLocationSuccess,
   });
 
   const { data, isLoading, refetch, isRefetching } = useQuery({
-    queryKey: ["products", location?.District, activeCategory.title],
+    queryKey: ["products", postLocation?.District, activeCategory.title],
     queryFn: () =>
       getProducts({
-        district: location?.District,
+        district: postLocation?.District,
         category: activeCategory.title,
       }),
     enabled: isCategorySuccess,
@@ -62,9 +72,10 @@ const Home = () => {
         postalCode: address[0].postalCode || "",
         place: address[0].district || "",
         city: address[0].city || "",
+        district: postLocation?.District || "",
       });
     })();
-  }, [setLocation, userLocation]);
+  }, [setLocation, userLocation, postLocation]);
 
   const onPressCategory = (category: { id: string; title: string }) => {
     setActiveCategory(category);
@@ -77,36 +88,55 @@ const Home = () => {
           header: () => <Header />,
         }}
       />
-      <FlatList
-        className="w-full flex-1"
-        refreshControl={
-          <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
-        }
-        ListHeaderComponent={
-          <ListHeader
-            subCategories={categories || []}
-            setActiveCategory={onPressCategory}
-            activeCategory={activeCategory}
-          />
-        }
-        ListHeaderComponentStyle={{ marginBottom: 20 }}
-        contentContainerStyle={{ padding: 12 }}
-        keyExtractor={(item) => item.id}
-        ListEmptyComponent={() => <Text>Empty List</Text>}
-        data={data}
-        numColumns={2}
-        renderItem={({ index, item }) => (
-          <ProductCard
-            id={item.id}
-            title={item.title}
-            image={item.image}
-            unit={item.unit}
-            price={item.price}
-            badgeText={Math.random() > 0.5 ? "30% Off" : undefined}
-          />
-        )}
-      />
-      <Loading isVisible={isLoading} />
+      {isPostLocationLoading || isCategoriesLoading ? (
+        <HomeContentSkeleton />
+      ) : (
+        <FlashList
+          className="w-full flex-1"
+          refreshControl={
+            <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
+          }
+          ListHeaderComponent={
+            <ListHeader
+              subCategories={categories || []}
+              setActiveCategory={onPressCategory}
+              activeCategory={activeCategory}
+            />
+          }
+          showsVerticalScrollIndicator={false}
+          ListHeaderComponentStyle={{ marginBottom: 20 }}
+          contentContainerStyle={{ padding: 12 }}
+          keyExtractor={(item) => item.id}
+          ListEmptyComponent={() => (
+            <View className="w-full flex-1 items-center justify-center">
+              {isLoading ? (
+                <ActivityIndicator
+                  color={colors.primary.DEFAULT}
+                  size={"large"}
+                />
+              ) : (
+                <Text className="font-pbold text-secondary-muted">
+                  No Products Found!
+                </Text>
+              )}
+            </View>
+          )}
+          data={data}
+          numColumns={2}
+          estimatedItemSize={250}
+          renderItem={({ item }) => (
+            <ProductCard
+              id={item.id}
+              title={item.title}
+              image={item.image}
+              unit={item.unit}
+              price={item.price}
+              badgeText={Math.random() > 0.5 ? "30% Off" : undefined}
+            />
+          )}
+        />
+      )}
+      {/* <Loading isVisible={isLoading} /> */}
       <StatusBar style="dark" />
     </View>
   );

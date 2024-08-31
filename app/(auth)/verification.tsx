@@ -152,6 +152,9 @@ const Verification = () => {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
+                autoFocus
+                autoComplete="sms-otp"
+                textContentType="oneTimeCode"
                 error={errors.code && errors.code.message}
               />
             )}

@@ -9,10 +9,12 @@ export interface User {
   created: Date;
 }
 
+// Location Types
 export interface Location {
   postalCode: string;
   place: string;
   city: string;
+  district: string;
 }
 
 export interface PostOfficeData {
@@ -30,6 +32,7 @@ export interface PostOfficeData {
   Pincode: string;
 }
 
+// Product types
 export interface Category {
   id: string;
   title: string;
@@ -50,4 +53,21 @@ export interface ProductData {
   unit: string;
   stock: number;
   sub_category: SubCategory;
+}
+
+// Wishlist Types
+
+export interface WishListItem {
+  id: string;
+  image: ImageSource;
+  product: ProductData;
+  quantity: number;
+  total_price: number;
+}
+export interface Wishlist {
+  id: string;
+  title: string;
+  items: WishListItem[];
+  number_of_items: number;
+  total_price: number;
 }

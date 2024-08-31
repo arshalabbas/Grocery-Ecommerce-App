@@ -49,13 +49,18 @@ const LocationScreen = () => {
       longitude: location.coords.longitude,
     });
 
-    setLocation({
-      postalCode: address[0].postalCode || "",
-      place: address[0].district || "",
-      city: address[0].city || "",
-    });
+    locationFromPinMutation.mutate(address[0].postalCode || "", {
+      onSuccess: (data) => {
+        setLocation({
+          postalCode: address[0].postalCode || "",
+          place: address[0].district || "",
+          city: address[0].city || "",
+          district: data.District,
+        });
 
-    router.back();
+        router.back();
+      },
+    });
   };
 
   const onSubmit = ({ pincode }: { pincode: string }) => {
@@ -65,6 +70,7 @@ const LocationScreen = () => {
           postalCode: pincode,
           place: data.District,
           city: data.Block,
+          district: data.District,
         });
 
         router.back();

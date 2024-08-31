@@ -9,6 +9,7 @@ import gps from "@/assets/icons/gps.svg";
 import bag from "@/assets/icons/bag.svg";
 import arrowLeft from "@/assets/icons/arrow-left.svg";
 import info from "@/assets/icons/info.svg";
+import xmark from "@/assets/icons/xmark.svg";
 
 // Action Icons
 // Active
@@ -63,4 +64,5 @@ export default {
   bag,
   heart,
   info,
+  xmark,
 };

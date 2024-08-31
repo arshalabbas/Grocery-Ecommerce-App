@@ -22,6 +22,7 @@ export const useUser = create<UserStore>((set) => ({
     postalCode: "",
     city: "",
     place: "",
+    district: "",
   },
   setUser: (user: User) => {
     set({ user });

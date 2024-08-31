@@ -30,9 +30,11 @@ const PhoneInput = ({ label, containerStyle, error, ...props }: Props) => {
           contentFit="contain"
         />
         <TextInput
-          className="h-full w-full py-4 text-lg"
+          className="h-full w-full py-4 font-pregular text-lg"
+          style={{ includeFontPadding: false }}
           keyboardType="number-pad"
           maxLength={10}
+          textAlignVertical="center"
           {...props}
         />
       </View>

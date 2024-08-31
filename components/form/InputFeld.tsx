@@ -22,7 +22,12 @@ const InputField = ({ label, containerStyle, error, ...props }: Props) => {
     >
       <Text className="font-pmedium text-lg">{label}</Text>
       <View className="w-full flex-row rounded-xl border-[.5px] border-secondary-muted/50 bg-white px-4">
-        <TextInput className="w-full py-4 text-lg font-semibold" {...props} />
+        <TextInput
+          className="w-full py-4 font-pregular text-lg"
+          textAlignVertical="center"
+          style={{ includeFontPadding: false }}
+          {...props}
+        />
       </View>
       {error && (
         <Text className="mt-1 font-pmedium text-sm text-danger">{error}</Text>

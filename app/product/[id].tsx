@@ -5,14 +5,15 @@ import ActionButton from "@/components/ui/ActionButton";
 import { icons } from "@/constants";
 import { getProduct, getProducts } from "@/lib/api/product.api";
 import { useUser } from "@/stores/useUserStore";
+import { FlashList } from "@shopify/flash-list";
 import { useQuery } from "@tanstack/react-query";
 import { Image } from "expo-image";
 import { Stack, useLocalSearchParams } from "expo-router";
-import { FlatList, Text, View } from "react-native";
+import { Text, View } from "react-native";
 
 const ProductScreen = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { postalCode } = useUser((state) => state.location);
+  const { district } = useUser((state) => state.location);
 
   const { data, isLoading, isSuccess } = useQuery({
     queryKey: ["product", id],
@@ -20,9 +21,9 @@ const ProductScreen = () => {
   });
 
   const { data: products } = useQuery({
-    queryKey: ["products", postalCode, data?.sub_category],
+    queryKey: ["products", district, data?.sub_category],
     queryFn: () =>
-      getProducts({ pincode: postalCode, category: data?.sub_category.title }),
+      getProducts({ district: district, category: data?.sub_category.title }),
     enabled: isSuccess,
   });
   return (
@@ -34,7 +35,7 @@ const ProductScreen = () => {
         }}
       />
 
-      <FlatList
+      <FlashList
         className="w-full flex-1"
         ListHeaderComponent={() => (
           <View>
@@ -68,12 +69,14 @@ const ProductScreen = () => {
             </Text>
           </View>
         )}
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingHorizontal: 12, paddingVertical: 5 }}
         keyExtractor={(item) => item.id}
         ListEmptyComponent={() => <Text>Empty List</Text>}
         ListFooterComponent={<View className="mb-20" />}
         data={products?.filter((product) => product.id !== id)}
         numColumns={2}
+        estimatedItemSize={100}
         renderItem={({ item }) => (
           <ProductCard
             id={item.id}

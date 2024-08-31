@@ -9,6 +9,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import { useRouter } from "expo-router";
 
 interface Props {
   subCategories: SubCategory[];
@@ -21,6 +22,7 @@ const ListHeader = ({
   activeCategory,
   setActiveCategory,
 }: Props) => {
+  const router = useRouter();
   return (
     <View>
       <Image
@@ -29,7 +31,7 @@ const ListHeader = ({
         source={dummy.banner}
         contentFit="cover"
       />
-      <MockSearchButton />
+      <MockSearchButton onPress={() => router.push("/search")} />
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
