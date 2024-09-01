@@ -1,5 +1,4 @@
 import { Image, ImageSource } from "expo-image";
-import { useState } from "react";
 import { TouchableOpacity } from "react-native";
 import Animated, {
   useAnimatedStyle,
@@ -17,12 +16,11 @@ interface Props {
     active: ImageSource;
     inactive: ImageSource;
   };
-  value: boolean;
+  active: boolean;
+  onPress: () => void;
 }
 
-const IconRadioButton = ({ icon, value }: Props) => {
-  const [active, setActive] = useState(false);
-
+const IconRadioButton = ({ icon, active, onPress }: Props) => {
   const scale = useSharedValue(1);
 
   if (active) {
@@ -42,13 +40,13 @@ const IconRadioButton = ({ icon, value }: Props) => {
     [active],
   );
 
-  const onPress = () => {
-    setActive((prev) => !prev);
+  const onPressHandler = () => {
     Haptics.selectionAsync();
+    onPress();
   };
 
   return (
-    <TouchableOpacity className="aspect-square w-6" onPress={onPress}>
+    <TouchableOpacity className="aspect-square w-6" onPress={onPressHandler}>
       <AnimatedImage
         className="h-full w-full"
         source={active ? icon.active : icon.inactive}

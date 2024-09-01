@@ -53,6 +53,7 @@ export interface ProductData {
   unit: string;
   stock: number;
   sub_category: SubCategory;
+  is_wishlist: boolean;
 }
 
 // Wishlist Types

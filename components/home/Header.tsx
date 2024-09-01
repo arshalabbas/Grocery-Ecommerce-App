@@ -17,7 +17,7 @@ const Header = () => {
         <TouchableOpacity
           className="w-1/2 flex-row items-center"
           activeOpacity={0.7}
-          onPress={() => router.push("/(tabs)/home/location")}
+          onPress={() => router.push("/(root)/location")}
         >
           <Image
             source={icons.location}
@@ -49,7 +49,7 @@ const Header = () => {
         <TouchableOpacity
           activeOpacity={0.7}
           className="aspect-square w-10 overflow-hidden rounded-full border border-primary"
-          onPress={() => router.push("/(tabs)/home/profile")}
+          onPress={() => router.push("/(root)/profile")}
         >
           <Image
             className="h-full w-full"

@@ -31,7 +31,7 @@ const ListHeader = ({
         source={dummy.banner}
         contentFit="cover"
       />
-      <MockSearchButton onPress={() => router.push("/search")} />
+      <MockSearchButton onPress={() => router.push("/(root)/search")} />
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}

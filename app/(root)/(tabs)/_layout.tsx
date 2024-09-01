@@ -1,7 +1,6 @@
 import { colors, icons } from "@/constants";
 import { Image, ImageSource } from "expo-image";
-import { Tabs, useSegments } from "expo-router";
-import { useEffect } from "react";
+import { Tabs } from "expo-router";
 import { Text, View } from "react-native";
 
 interface TabBarIconProps {
@@ -32,14 +31,6 @@ const TabBarIcon = ({ label, focused, color, icon }: TabBarIconProps) => {
 };
 
 const TabsLayout = () => {
-  const segments = useSegments();
-
-  const hiddenTabsScreens = ["location", "profile"];
-
-  // useEffect(() => {
-  //   console.log(segments[2]);
-  // }, [segments]);
-
   return (
     <Tabs
       screenOptions={{
@@ -47,7 +38,6 @@ const TabsLayout = () => {
         tabBarActiveTintColor: colors.primary.DEFAULT,
         tabBarInactiveTintColor: colors.secondary.DEFAULT,
         tabBarStyle: {
-          display: segments[2] && segments[2] === "profile" ? "none" : "flex",
           height: 75,
           elevation: 0,
           borderTopWidth: 0.5,
@@ -71,7 +61,7 @@ const TabsLayout = () => {
     >
       {/* Home Tab */}
       <Tabs.Screen
-        name="home"
+        name="home/index"
         options={{
           title: "Home",
           tabBarIcon: ({ color, focused }) => (
@@ -82,7 +72,6 @@ const TabsLayout = () => {
               color={color}
             />
           ),
-          headerShown: false,
         }}
       />
       {/* Wishlist Tab */}

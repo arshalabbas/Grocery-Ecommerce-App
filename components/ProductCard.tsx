@@ -21,9 +21,18 @@ interface Props {
   unit: string;
   price: number;
   badgeText?: string;
+  hasWishlisted: boolean;
 }
 
-const ProductCard = ({ id, image, title, unit, price, badgeText }: Props) => {
+const ProductCard = ({
+  id,
+  image,
+  title,
+  unit,
+  price,
+  badgeText,
+  hasWishlisted,
+}: Props) => {
   const scale = useSharedValue<number>(1);
 
   const onPressIn = () => {
@@ -39,7 +48,7 @@ const ProductCard = ({ id, image, title, unit, price, badgeText }: Props) => {
   }));
 
   return (
-    <Link href={`/product/${id}`} asChild>
+    <Link href={`/(root)/product/${id}`} asChild>
       <AnimatedPressable
         className="m-1 min-h-[230px] flex-1 items-center justify-between overflow-hidden rounded-lg bg-white p-2"
         onPressIn={onPressIn}
@@ -47,7 +56,11 @@ const ProductCard = ({ id, image, title, unit, price, badgeText }: Props) => {
         style={animatedStyles}
       >
         <View className="w-full items-end">
-          <IconRadioButton icon={icons.heart} value={false} />
+          <IconRadioButton
+            icon={icons.heart}
+            active={hasWishlisted}
+            onPress={() => {}}
+          />
         </View>
         <Image
           source={image}
