@@ -26,6 +26,7 @@ const ProductScreen = () => {
       getProducts({ district: district, category: data?.sub_category.title }),
     enabled: isSuccess,
   });
+
   return (
     <View className="flex-1 bg-background">
       <Stack.Screen

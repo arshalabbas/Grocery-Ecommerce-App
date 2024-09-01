@@ -9,7 +9,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { memo } from "react";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
@@ -33,6 +33,7 @@ const ProductCard = ({
   badgeText,
   hasWishlisted,
 }: Props) => {
+  const router = useRouter();
   const scale = useSharedValue<number>(1);
 
   const onPressIn = () => {
@@ -59,7 +60,12 @@ const ProductCard = ({
           <IconRadioButton
             icon={icons.heart}
             active={hasWishlisted}
-            onPress={() => {}}
+            onPress={() =>
+              router.push({
+                pathname: "/(root)/(modals)/add-wishlist-item",
+                params: { id, title, image: image as string },
+              })
+            }
           />
         </View>
         <Image
