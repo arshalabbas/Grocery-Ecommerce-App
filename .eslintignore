@@ -2,3 +2,4 @@ expo-env.d.ts
 .expo
 node_modules
 nativewind-env.d.ts
+assets
