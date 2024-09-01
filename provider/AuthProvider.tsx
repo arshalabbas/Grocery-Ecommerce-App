@@ -58,7 +58,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         if (!data.on_boarded) {
           router.replace("/onboarding");
         } else {
-          router.replace("/(tabs)/home");
+          router.replace("/(root)/(tabs)/home");
         }
       }
     }

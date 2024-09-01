@@ -11,7 +11,7 @@ declare module "@tanstack/react-query" {
   }
 }
 
-const RootLayout = () => {
+const AppLayout = () => {
   const [fontsLoaded, error] = useFonts({
     "Poppins-Black": require("../assets/fonts/Poppins-Black.ttf"),
     "Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),
@@ -44,7 +44,7 @@ const RootLayout = () => {
           <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen name="index" />
             <Stack.Screen name="(auth)" />
-            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="(root)" />
             <Stack.Screen name="onboarding" />
           </Stack>
         </AuthProvider>
@@ -53,4 +53,4 @@ const RootLayout = () => {
   );
 };
 
-export default RootLayout;
+export default AppLayout;
