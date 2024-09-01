@@ -57,6 +57,7 @@ const ActionButton = ({
           source={iconLeft}
           className="mr-1 aspect-square w-4"
           contentFit="contain"
+          tintColor={"white"}
         />
       )}
       <Text
@@ -70,6 +71,7 @@ const ActionButton = ({
           source={iconRight}
           className="ml-1 aspect-square w-4"
           contentFit="contain"
+          tintColor={"white"}
         />
       )}
     </AnimatedPressable>

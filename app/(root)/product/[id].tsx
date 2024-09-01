@@ -86,7 +86,7 @@ const ProductScreen = () => {
             unit={item.unit}
             price={item.price}
             badgeText={Math.random() > 0.5 ? "30% Off" : undefined}
-            hasWishlisted={item.is_wishlist}
+            hasWishlisted={item.in_wishlist}
           />
         )}
       />

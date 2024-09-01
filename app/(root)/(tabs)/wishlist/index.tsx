@@ -1,19 +1,27 @@
 import ActionButton from "@/components/ui/ActionButton";
 import WishlistCard from "@/components/wishlist/WishlistCard";
 import { icons } from "@/constants";
-import { getWishlist } from "@/lib/api/wishlist.api";
+import { getWishlists } from "@/lib/api/wishlist.api";
+import { useUser } from "@/stores/useUserStore";
 import { FlashList } from "@shopify/flash-list";
 import { useQuery } from "@tanstack/react-query";
+import { Image } from "expo-image";
 import { Tabs, useRouter } from "expo-router";
+import { useEffect } from "react";
 import { Text, View } from "react-native";
 
 const WishList = () => {
   const router = useRouter();
+  const { district } = useUser((state) => state.location);
 
   const { data } = useQuery({
-    queryKey: ["wishlist"],
-    queryFn: getWishlist,
+    queryKey: ["wishlists", district],
+    queryFn: () => getWishlists({ district }),
   });
+
+  useEffect(() => {
+    console.log(district);
+  }, [district]);
 
   return (
     <View className="flex-1">
@@ -36,6 +44,7 @@ const WishList = () => {
           data={data}
           renderItem={({ item }) => (
             <WishlistCard
+              id={item.id}
               title={item.title}
               itemsLength={item.number_of_items}
               items={item.items}
@@ -52,6 +61,18 @@ const WishList = () => {
                 iconLeft={icons.plus}
                 onPress={() => router.push("/(root)/(modals)/new-wishlist")}
               />
+            </View>
+          )}
+          ListFooterComponent={() => (
+            <View className="mt-4 w-full flex-row items-center justify-center space-x-2">
+              <Image
+                className="aspect-square w-6"
+                source={icons.info}
+                contentFit="contain"
+              />
+              <Text className="font-pmedium text-sm text-secondary-muted">
+                Wishlists are saved per district.
+              </Text>
             </View>
           )}
           estimatedItemSize={250}

@@ -2,10 +2,24 @@ import { Wishlist } from "@/types";
 import api from "./axios";
 
 // get all wishlist
-export const getWishlist = () => {
+export const getWishlists = ({ district }: { district?: string }) => {
   return new Promise<Wishlist[]>((resolve, reject) => {
     api
-      .get("/wishlist")
+      .get("/wishlist/?district=" + district)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        reject(error.response.data);
+      });
+  });
+};
+
+// Get wishlist
+export const getWishlist = ({ id }: { id: string }) => {
+  return new Promise<Wishlist>((resolve, reject) => {
+    api
+      .get(`/wishlist/${id}`)
       .then((response) => {
         resolve(response.data);
       })
@@ -26,6 +40,34 @@ export const createWishlist = ({
   return new Promise<Wishlist>((resolve, reject) => {
     api
       .post("/wishlist/add", { title, district })
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        reject(error.response.data);
+      });
+  });
+};
+
+// Delete wishlist
+export const deleteWishlist = ({ id }: { id: string }) => {
+  return new Promise((resolve, reject) => {
+    api
+      .delete(`/wishlist/${id}`)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        reject(error.response.data);
+      });
+  });
+};
+
+// Edit Wishlist
+export const editWishlist = ({ id, title }: { id: string; title: string }) => {
+  return new Promise<Wishlist>((resolve, reject) => {
+    api
+      .patch(`/wishlist/${id}`, { title })
       .then((response) => {
         resolve(response.data);
       })

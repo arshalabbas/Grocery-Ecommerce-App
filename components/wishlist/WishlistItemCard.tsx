@@ -14,10 +14,18 @@ interface Props {
   image: ImageSource;
   title: string;
   quantity: number;
+  totalPrice: number;
   unit: string;
 }
 
-const WishlistItemCard = ({ id, image, title, quantity, unit }: Props) => {
+const WishlistItemCard = ({
+  id,
+  image,
+  title,
+  quantity,
+  totalPrice,
+  unit,
+}: Props) => {
   const scale = useSharedValue<number>(1);
 
   const onPressIn = () => {
@@ -52,7 +60,7 @@ const WishlistItemCard = ({ id, image, title, quantity, unit }: Props) => {
                 {title}
               </Text>
               <Text className="font-pregular text-xs text-secondary-muted">
-                {quantity} {unit}
+                ₹{totalPrice} • {quantity} {unit}
               </Text>
             </View>
           </View>

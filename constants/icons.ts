@@ -10,6 +10,8 @@ import bag from "@/assets/icons/bag.svg";
 import arrowLeft from "@/assets/icons/arrow-left.svg";
 import info from "@/assets/icons/info.svg";
 import xmark from "@/assets/icons/xmark.svg";
+import edit from "@/assets/icons/edit.svg";
+import trash from "@/assets/icons/trash.svg";
 
 // Action Icons
 // Active
@@ -65,4 +67,6 @@ export default {
   heart,
   info,
   xmark,
+  edit,
+  trash,
 };

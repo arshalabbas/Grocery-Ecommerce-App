@@ -1,7 +1,8 @@
 import Loading from "@/components/misc/Loading";
 import ActionButton from "@/components/ui/ActionButton";
 import { icons } from "@/constants";
-import { addToWishlist, getWishlist } from "@/lib/api/wishlist.api";
+import { addToWishlist, getWishlists } from "@/lib/api/wishlist.api";
+import { useUser } from "@/stores/useUserStore";
 import { FlashList } from "@shopify/flash-list";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Image } from "expo-image";
@@ -15,11 +16,12 @@ const AddWishListItem = () => {
     title: string;
     image: string;
   }>();
+  const { district } = useUser((state) => state.location);
   const router = useRouter();
 
   const { data } = useQuery({
-    queryKey: ["wishlist"],
-    queryFn: getWishlist,
+    queryKey: ["wishlists", district],
+    queryFn: () => getWishlists({ district }),
   });
 
   const addItemMutation = useMutation({
@@ -27,23 +29,16 @@ const AddWishListItem = () => {
   });
 
   const onPressWishListCard = (wishlistId: string, hasWishlistd: boolean) => {
-    if (hasWishlistd) {
-      // TODO: Delete Item form the wishlist
-      alert("Already in this list");
-      return;
-    }
-
     addItemMutation.mutate(
-      { id: wishlistId, productId: id, quantity: 1 },
+      { id: wishlistId, productId: id, quantity: hasWishlistd ? 0 : 1 },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({
             queryKey: ["products"],
           });
           queryClient.invalidateQueries({
-            queryKey: ["wishlist"],
+            queryKey: ["wishlists"],
           });
-          router.back();
         },
       },
     );
@@ -127,6 +122,10 @@ const AddWishListItem = () => {
               <Text className="mb-5 font-pmedium text-secondary">
                 You haven't created a wishlist.
               </Text>
+            </View>
+          )}
+          ListFooterComponent={() => (
+            <View className="mt-5 w-full flex-row justify-center">
               <ActionButton
                 title="Create wishlist"
                 iconLeft={icons.plus}
@@ -136,6 +135,16 @@ const AddWishListItem = () => {
           )}
           estimatedItemSize={70}
         />
+      </View>
+      <View className="w-full flex-row items-center justify-center space-x-2 bg-background py-2">
+        <Image
+          className="aspect-square w-6"
+          source={icons.info}
+          contentFit="contain"
+        />
+        <Text className="font-pmedium text-sm text-secondary-muted">
+          Wishlists are saved per district.
+        </Text>
       </View>
       <Loading isVisible={addItemMutation.isPending} />
     </View>

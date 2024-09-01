@@ -4,7 +4,7 @@ import { FlashList } from "@shopify/flash-list";
 import { Image } from "expo-image";
 import { View, Text, TouchableOpacity } from "react-native";
 import WishlistItemCard from "./WishlistItemCard";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ActionButton from "../ui/ActionButton";
 import Animated, {
   useAnimatedStyle,
@@ -12,15 +12,18 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import clsx from "clsx";
+import { useRouter } from "expo-router";
 
 interface Props {
+  id: string;
   title: string;
   itemsLength: number;
   items: WishListItem[];
   totalPrice: number;
 }
 
-const WishlistCard = ({ title, itemsLength, items, totalPrice }: Props) => {
+const WishlistCard = ({ id, title, itemsLength, items, totalPrice }: Props) => {
+  const router = useRouter();
   const [expanded, setExpanded] = useState(false);
 
   const initialHeight = itemsLength > 3 ? 300 : itemsLength * 100;
@@ -40,25 +43,43 @@ const WishlistCard = ({ title, itemsLength, items, totalPrice }: Props) => {
     height.value = expanded ? 300 : maxHeight;
   };
 
-  useEffect(() => {}, [itemsLength]);
-
   return (
     <View className="mb-4 w-full rounded-xl bg-white">
       {/* Wishlist Header */}
-      <View className="w-full flex-row space-x-4 p-5">
-        <View className="rounded-xl bg-primary-200 p-4">
+      <View className="w-full flex-row justify-between p-5">
+        <View className="flex-row space-x-2">
+          <View className="rounded-xl bg-primary-200 p-4">
+            <Image
+              source={icons.wishlist.active}
+              className="aspect-square w-6"
+              contentFit="contain"
+            />
+          </View>
+          <View>
+            <Text className="font-psemibold text-xl text-secondary">
+              {title}
+            </Text>
+            <Text className="font-pmedium text-secondary-muted">
+              {itemsLength} Item{itemsLength > 1 && "s"}
+            </Text>
+          </View>
+        </View>
+
+        <TouchableOpacity
+          className="p-1"
+          onPress={() =>
+            router.push({
+              pathname: "/(root)/(modals)/edit-wishlist",
+              params: { id },
+            })
+          }
+        >
           <Image
-            source={icons.wishlist.active}
-            className="aspect-square w-6"
+            source={icons.edit}
+            className="aspect-square w-4"
             contentFit="contain"
           />
-        </View>
-        <View>
-          <Text className="font-psemibold text-xl text-secondary">{title}</Text>
-          <Text className="font-pmedium text-secondary-muted">
-            {itemsLength} Item{itemsLength > 1 && "s"}
-          </Text>
-        </View>
+        </TouchableOpacity>
       </View>
       {/* Wishlist Items */}
       <Animated.View className="overflow-hidden" style={animatedStyle}>
@@ -73,6 +94,7 @@ const WishlistCard = ({ title, itemsLength, items, totalPrice }: Props) => {
                 image={item.product.image}
                 title={item.product.title}
                 quantity={item.quantity}
+                totalPrice={item.total_price}
                 unit={item.product.unit}
               />
             )}
