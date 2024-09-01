@@ -17,6 +17,7 @@ import HomeContentSkeleton from "@/components/skeletons/HomeContentSkeleton";
 const Home = () => {
   const userLocation = useUser((state) => state.location);
   const setLocation = useUser((state) => state.setLocation);
+  const updateDistrict = useUser((state) => state.updateDistrict);
 
   const [activeCategory, setActiveCategory] = useState<{
     id: string;
@@ -72,10 +73,19 @@ const Home = () => {
         postalCode: address[0].postalCode || "",
         place: address[0].district || "",
         city: address[0].city || "",
-        district: postLocation?.District || "",
+        district: "",
       });
     })();
-  }, [setLocation, userLocation, postLocation]);
+  }, [setLocation, userLocation]);
+
+  useEffect(() => {
+    if (
+      postLocation?.District &&
+      postLocation.District !== userLocation.district
+    ) {
+      updateDistrict(postLocation.District);
+    }
+  }, [postLocation?.District, updateDistrict, userLocation.district]);
 
   const onPressCategory = (category: { id: string; title: string }) => {
     setActiveCategory(category);

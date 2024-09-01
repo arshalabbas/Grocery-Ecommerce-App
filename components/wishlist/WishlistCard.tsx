@@ -4,8 +4,7 @@ import { FlashList } from "@shopify/flash-list";
 import { Image } from "expo-image";
 import { View, Text, TouchableOpacity } from "react-native";
 import WishlistItemCard from "./WishlistItemCard";
-import { useState } from "react";
-import ActionButton from "../ui/ActionButton";
+import { useEffect, useState } from "react";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -13,6 +12,7 @@ import Animated, {
 } from "react-native-reanimated";
 import clsx from "clsx";
 import { useRouter } from "expo-router";
+import Button from "../ui/Button";
 
 interface Props {
   id: string;
@@ -43,11 +43,16 @@ const WishlistCard = ({ id, title, itemsLength, items, totalPrice }: Props) => {
     height.value = expanded ? 300 : maxHeight;
   };
 
+  useEffect(() => {
+    height.value = itemsLength > 3 ? 300 : itemsLength * 100;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [itemsLength]);
+
   return (
     <View className="mb-4 w-full rounded-xl bg-white">
       {/* Wishlist Header */}
       <View className="w-full flex-row justify-between p-5">
-        <View className="flex-row space-x-2">
+        <View className="flex-1 flex-row space-x-2">
           <View className="rounded-xl bg-primary-200 p-4">
             <Image
               source={icons.wishlist.active}
@@ -55,8 +60,11 @@ const WishlistCard = ({ id, title, itemsLength, items, totalPrice }: Props) => {
               contentFit="contain"
             />
           </View>
-          <View>
-            <Text className="font-psemibold text-xl text-secondary">
+          <View className="flex-1">
+            <Text
+              className="font-psemibold text-lg text-secondary"
+              numberOfLines={1}
+            >
               {title}
             </Text>
             <Text className="font-pmedium text-secondary-muted">
@@ -118,7 +126,16 @@ const WishlistCard = ({ id, title, itemsLength, items, totalPrice }: Props) => {
       )}
       <View className="w-full flex-row items-center justify-between px-5 pb-5">
         <Text className="font-pbold text-2xl">₹{totalPrice}</Text>
-        {itemsLength > 0 && <ActionButton title="Order" />}
+        {itemsLength > 0 && (
+          <View>
+            <Button
+              title="Order"
+              size={"md"}
+              width={"no-width"}
+              rounded={"xl"}
+            />
+          </View>
+        )}
       </View>
     </View>
   );

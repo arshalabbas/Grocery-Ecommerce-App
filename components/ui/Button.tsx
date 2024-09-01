@@ -29,7 +29,16 @@ interface Props
   textStyles?: StyleProp<TextStyle>;
 }
 
-const Button = ({ title, variant, icon, containerStyles, ...props }: Props) => {
+const Button = ({
+  title,
+  variant,
+  rounded,
+  size,
+  width,
+  icon,
+  containerStyles,
+  ...props
+}: Props) => {
   const scale = useSharedValue<number>(1);
 
   const onPressIn = () => {
@@ -48,7 +57,7 @@ const Button = ({ title, variant, icon, containerStyles, ...props }: Props) => {
     <AnimatedPressable
       onPressIn={onPressIn}
       onPressOut={onPressOut}
-      className={cn(buttonContainerStyles({ variant }))}
+      className={cn(buttonContainerStyles({ variant, rounded, size, width }))}
       {...props}
       style={[animatedStyles, containerStyles]}
     >
@@ -64,7 +73,7 @@ const Button = ({ title, variant, icon, containerStyles, ...props }: Props) => {
       )}
       <Animated.Text
         entering={BounceIn}
-        className={cn(buttonTextStyles({ variant }))}
+        className={cn(buttonTextStyles({ variant, size }))}
         style={{ includeFontPadding: false, textAlignVertical: "center" }}
       >
         {title}
@@ -76,7 +85,7 @@ const Button = ({ title, variant, icon, containerStyles, ...props }: Props) => {
 export default Button;
 
 const buttonContainerStyles = cva(
-  "flex-row w-full items-center justify-center p-3 shadow-md shadow-neutral-400/70", // Base styles
+  "flex-row items-center justify-center shadow-md shadow-neutral-400/70", // Base styles
   {
     variants: {
       variant: {
@@ -90,16 +99,26 @@ const buttonContainerStyles = cva(
         pill: "rounded-full",
         xl: "rounded-xl",
       },
+      size: {
+        md: "p-2",
+        lg: "p-3",
+      },
+      width: {
+        wide: "w-full",
+        "no-width": "px-4",
+      },
     },
     defaultVariants: {
       variant: "solid-primary",
       rounded: "pill",
+      size: "lg",
+      width: "wide",
     },
   },
 );
 
 const buttonTextStyles = cva(
-  "text-lg font-pbold", // Base styles
+  "font-pbold", // Base styles
   {
     variants: {
       variant: {
@@ -109,9 +128,15 @@ const buttonTextStyles = cva(
         "outline-secondary": "text-secondary",
         "solid-white": "text-secondary/80 font-psemibold",
       },
+      size: {
+        md: "",
+        lg: "text-lg",
+      },
     },
+
     defaultVariants: {
       variant: "solid-primary",
+      size: "lg",
     },
   },
 );

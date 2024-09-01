@@ -42,7 +42,7 @@ const NewWishlist = () => {
       { title, district },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["wishlist"] });
+          queryClient.invalidateQueries({ queryKey: ["wishlists"] });
           router.back();
         },
         onError: (error) => {

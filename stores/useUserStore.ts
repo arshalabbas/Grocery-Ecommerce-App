@@ -6,6 +6,7 @@ export interface UserStore {
   location: Location;
   setUser: (user: User) => void;
   setLocation: (location: Location) => void;
+  updateDistrict: (district: string) => void;
   clearUser: () => void;
 }
 
@@ -29,6 +30,9 @@ export const useUser = create<UserStore>((set) => ({
   },
   setLocation: (location: Location) => {
     set((state) => ({ ...state, location }));
+  },
+  updateDistrict: (district: string) => {
+    set((state) => ({ ...state, location: { ...state.location, district } }));
   },
   clearUser: () => {
     set({
