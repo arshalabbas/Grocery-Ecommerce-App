@@ -5,15 +5,17 @@ export const getProducts = ({
   pincode,
   category,
   district,
+  search,
 }: {
   pincode?: string;
   category?: string;
   district?: string;
+  search?: string;
 }) => {
   return new Promise<ProductData[]>((resolve, reject) => {
     api
       .get(`/product/`, {
-        params: { pincode, district, category },
+        params: { pincode, district, category, search },
       })
       .then((response) => {
         resolve(response.data);

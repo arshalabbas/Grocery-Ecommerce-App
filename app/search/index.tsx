@@ -18,7 +18,7 @@ const SearchScreen = () => {
 
   const { data } = useQuery({
     queryKey: ["product", district, searchQuery],
-    queryFn: () => getProducts({ category: searchQuery }),
+    queryFn: () => getProducts({ district: district, search: searchQuery }),
     enabled: searchQuery !== "",
   });
 
