@@ -13,6 +13,11 @@ import Animated, {
 import clsx from "clsx";
 import { useRouter } from "expo-router";
 import Button from "../ui/Button";
+import { useWishlistStore } from "@/stores/useWishlistStore";
+import ActionButton from "../ui/ActionButton";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { updateManyWishlistItems } from "@/lib/api/wishlist.api";
+import Loading from "../misc/Loading";
 
 interface Props {
   id: string;
@@ -23,8 +28,16 @@ interface Props {
 }
 
 const WishlistCard = ({ id, title, itemsLength, items, totalPrice }: Props) => {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const [expanded, setExpanded] = useState(false);
+  const hasChanged = useWishlistStore((state) => state.hasChanged);
+  const setHasChanged = useWishlistStore((state) => state.setHasChanged);
+  const getAllProducts = useWishlistStore((state) => state.getAllProducts);
+
+  const updateAllMutation = useMutation({
+    mutationFn: updateManyWishlistItems,
+  });
 
   const initialHeight = itemsLength > 3 ? 300 : itemsLength * 100;
 
@@ -47,6 +60,21 @@ const WishlistCard = ({ id, title, itemsLength, items, totalPrice }: Props) => {
     height.value = itemsLength > 3 ? 300 : itemsLength * 100;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itemsLength]);
+
+  const saveHandler = () => {
+    updateAllMutation.mutate(
+      { id, products: getAllProducts(id) },
+      {
+        onSuccess: () => {
+          setHasChanged(false);
+          queryClient.invalidateQueries({ queryKey: ["wishlists"] });
+        },
+        onError: (error) => {
+          console.log(error);
+        },
+      },
+    );
+  };
 
   return (
     <View className="mb-4 w-full rounded-xl bg-white">
@@ -99,6 +127,7 @@ const WishlistCard = ({ id, title, itemsLength, items, totalPrice }: Props) => {
             renderItem={({ item }) => (
               <WishlistItemCard
                 id={item.product.id}
+                wishlistId={id}
                 image={item.product.image}
                 title={item.product.title}
                 quantity={item.quantity}
@@ -128,15 +157,24 @@ const WishlistCard = ({ id, title, itemsLength, items, totalPrice }: Props) => {
         <Text className="font-pbold text-2xl">₹{totalPrice}</Text>
         {itemsLength > 0 && (
           <View>
-            <Button
-              title="Order"
-              size={"md"}
-              width={"no-width"}
-              rounded={"xl"}
-            />
+            {hasChanged ? (
+              <ActionButton
+                title="Save changes"
+                iconLeft={icons.save}
+                onPress={saveHandler}
+              />
+            ) : (
+              <Button
+                title="Order"
+                size={"md"}
+                width={"no-width"}
+                rounded={"xl"}
+              />
+            )}
           </View>
         )}
       </View>
+      <Loading isVisible={updateAllMutation.isPending} />
     </View>
   );
 };

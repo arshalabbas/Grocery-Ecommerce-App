@@ -1,24 +1,21 @@
 import { icons } from "@/constants";
 import { Image } from "expo-image";
 import { View, Text, TouchableOpacity } from "react-native";
-import { useCountStore } from "@/stores/useCountStore"; // Adjust the import path
 import ActionButton from "./ActionButton";
 
 interface Props {
-  name: string;
+  count: number;
+  onIncrementCount?: () => void;
+  onDecrementCount?: () => void;
 }
 
-const CountButton = ({ name }: Props) => {
-  const count = useCountStore((state) => state.counts[name] || 0);
-  const increment = useCountStore((state) => state.increment);
-  const decrement = useCountStore((state) => state.decrement);
-
+const CountButton = ({ count, onIncrementCount, onDecrementCount }: Props) => {
   if (count <= 0) {
     return (
       <ActionButton
         title="Add"
         iconLeft={icons.add}
-        onPress={() => increment(name)}
+        onPress={onIncrementCount}
       />
     );
   }
@@ -27,10 +24,10 @@ const CountButton = ({ name }: Props) => {
     <View className="flex-row items-center space-x-2">
       <TouchableOpacity
         className="aspect-square rounded-full border-[.5px] border-secondary-muted/50 bg-white p-3"
-        onPress={() => increment(name)}
+        onPress={onDecrementCount}
       >
         <Image
-          source={icons.add}
+          source={icons.sub}
           className="aspect-square w-3"
           contentFit="contain"
         />
@@ -39,10 +36,10 @@ const CountButton = ({ name }: Props) => {
       <TouchableOpacity>
         <TouchableOpacity
           className="aspect-square rounded-full border-[.5px] border-secondary-muted/50 bg-white p-3"
-          onPress={() => decrement(name)}
+          onPress={onIncrementCount}
         >
           <Image
-            source={icons.sub}
+            source={icons.add}
             className="aspect-square w-3"
             contentFit="contain"
           />

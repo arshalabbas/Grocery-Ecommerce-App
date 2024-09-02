@@ -14,6 +14,7 @@ import edit from "@/assets/icons/edit.svg";
 import trash from "@/assets/icons/trash.svg";
 import add from "@/assets/icons/add.svg";
 import sub from "@/assets/icons/sub.svg";
+import save from "@/assets/icons/save.svg";
 
 // Action Icons
 // Active
@@ -73,4 +74,5 @@ export default {
   trash,
   add,
   sub,
+  save,
 };

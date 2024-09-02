@@ -10,6 +10,7 @@ import { Image } from "expo-image";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { Text, TouchableOpacity, View } from "react-native";
 import * as Haptics from "expo-haptics";
+import AddtoWislistSkeleton from "@/components/skeletons/AddtoWislistSkeleton";
 
 const AddWishListItem = () => {
   const queryClient = useQueryClient();
@@ -21,7 +22,7 @@ const AddWishListItem = () => {
   const { district } = useUser((state) => state.location);
   const router = useRouter();
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["wishlists", district],
     queryFn: () => getWishlists({ district }),
   });
@@ -118,13 +119,16 @@ const AddWishListItem = () => {
               </TouchableOpacity>
             );
           }}
-          ListEmptyComponent={() => (
-            <View className="mt-5 w-full flex-1 items-center">
-              <Text className="mb-5 font-pmedium text-secondary">
-                You haven't created a wishlist.
-              </Text>
-            </View>
-          )}
+          ListEmptyComponent={() => {
+            if (isLoading) return <AddtoWislistSkeleton />;
+            return (
+              <View className="mt-5 w-full flex-1 items-center">
+                <Text className="mb-5 font-pmedium text-secondary">
+                  You haven't created a wishlist.
+                </Text>
+              </View>
+            );
+          }}
           ListFooterComponent={() => (
             <View className="mt-5 w-full flex-row justify-center">
               <ActionButton
