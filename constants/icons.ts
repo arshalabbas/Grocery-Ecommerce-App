@@ -12,6 +12,8 @@ import info from "@/assets/icons/info.svg";
 import xmark from "@/assets/icons/xmark.svg";
 import edit from "@/assets/icons/edit.svg";
 import trash from "@/assets/icons/trash.svg";
+import add from "@/assets/icons/add.svg";
+import sub from "@/assets/icons/sub.svg";
 
 // Action Icons
 // Active
@@ -69,4 +71,6 @@ export default {
   xmark,
   edit,
   trash,
+  add,
+  sub,
 };

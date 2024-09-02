@@ -11,6 +11,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { Link, useRouter } from "expo-router";
 import { memo } from "react";
+import * as Haptics from "expo-haptics";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -60,12 +61,13 @@ const ProductCard = ({
           <IconRadioButton
             icon={icons.heart}
             active={hasWishlisted}
-            onPress={() =>
+            onPress={() => {
+              Haptics.selectionAsync();
               router.push({
                 pathname: "/(root)/(modals)/add-wishlist-item",
                 params: { id, title, image: image as string },
-              })
-            }
+              });
+            }}
           />
         </View>
         <Image

@@ -2,6 +2,7 @@ import Loading from "@/components/misc/Loading";
 import ProductCard from "@/components/ProductCard";
 import ScreenHeader from "@/components/ScreenHeader";
 import ActionButton from "@/components/ui/ActionButton";
+import CountButton from "@/components/ui/CountButton";
 import { icons } from "@/constants";
 import { getProduct, getProducts } from "@/lib/api/product.api";
 import { useUser } from "@/stores/useUserStore";
@@ -61,7 +62,8 @@ const ProductScreen = () => {
                       ₹ {data?.price}
                     </Text>
                   </View>
-                  <ActionButton iconLeft={icons.plus} title="Add" />
+                  {/* <ActionButton iconLeft={icons.plus} title="Add" /> */}
+                  <CountButton name={"product-" + id} />
                 </View>
               </View>
             </View>

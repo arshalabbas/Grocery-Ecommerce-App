@@ -7,7 +7,6 @@ import { FlashList } from "@shopify/flash-list";
 import { useQuery } from "@tanstack/react-query";
 import { Image } from "expo-image";
 import { Tabs, useRouter } from "expo-router";
-import { useEffect } from "react";
 import { Text, View } from "react-native";
 
 const WishList = () => {
@@ -18,10 +17,6 @@ const WishList = () => {
     queryKey: ["wishlists", district],
     queryFn: () => getWishlists({ district }),
   });
-
-  useEffect(() => {
-    console.log(district);
-  }, [district]);
 
   return (
     <View className="flex-1">
@@ -41,13 +36,13 @@ const WishList = () => {
       />
       <View className="flex-1">
         <FlashList
-          data={data}
+          data={data?.toReversed()}
           renderItem={({ item }) => (
             <WishlistCard
               id={item.id}
               title={item.title}
               itemsLength={item.number_of_items}
-              items={item.items}
+              items={item.items.toReversed()}
               totalPrice={item.total_price}
             />
           )}
