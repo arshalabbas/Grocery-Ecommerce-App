@@ -68,6 +68,7 @@ const WishlistCard = ({ id, title, itemsLength, items, totalPrice }: Props) => {
         onSuccess: () => {
           setHasChanged(false);
           queryClient.invalidateQueries({ queryKey: ["wishlists"] });
+          queryClient.invalidateQueries({ queryKey: ["products"] });
         },
         onError: (error) => {
           console.log(error);
