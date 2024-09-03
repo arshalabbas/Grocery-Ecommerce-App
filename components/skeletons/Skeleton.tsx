@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect } from "react";
 import { ViewProps } from "react-native";
 import Animated, {
   useSharedValue,
@@ -6,28 +6,42 @@ import Animated, {
   withRepeat,
   withTiming,
   Easing,
+  withDelay,
 } from "react-native-reanimated";
 
-const Skeleton = ({ style, ...props }: ViewProps) => {
+interface Props extends ViewProps {
+  order?: number;
+}
+
+const Skeleton = ({ style, children, order = 0, ...props }: Props) => {
   const opacity = useSharedValue(0.3);
 
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,
   }));
 
-  React.useEffect(() => {
-    opacity.value = withRepeat(
-      withTiming(1, {
-        duration: 1000,
-        easing: Easing.inOut(Easing.ease),
-      }),
-      -1,
-      true,
+  useEffect(() => {
+    opacity.value = withDelay(
+      order * 200,
+      withRepeat(
+        withTiming(1, {
+          duration: 1000,
+          easing: Easing.inOut(Easing.ease),
+        }),
+        -1,
+        true,
+      ),
     );
-  }, [opacity]);
+  }, [opacity, order]);
 
   return (
-    <Animated.View className="bg-primary-200" style={[animatedStyle, style]} />
+    <Animated.View
+      className="bg-primary-200"
+      style={[animatedStyle, style]}
+      {...props}
+    >
+      {children}
+    </Animated.View>
   );
 };
 

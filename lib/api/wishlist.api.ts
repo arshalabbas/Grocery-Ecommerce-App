@@ -99,35 +99,3 @@ export const editWishlistItems = ({
       });
   });
 };
-
-// update many products in the wishlist
-export const updateManyWishlistItems = ({
-  id,
-  products,
-}: {
-  id: string;
-  products: { id: string; quantity: number }[];
-}) => {
-  let updateList: Promise<any>[] = [];
-
-  products.forEach((product) => {
-    updateList.push(
-      new Promise((resolve, reject) => {
-        api
-          .post(`/wishlist/item`, {
-            wishlist_id: id,
-            product_id: product.id,
-            quantity: product.quantity,
-          })
-          .then((response) => {
-            resolve(response.data);
-          })
-          .catch((error) => {
-            reject(error.response.data);
-          });
-      }),
-    );
-  });
-
-  return Promise.all(updateList);
-};

@@ -16,6 +16,7 @@ import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Loading from "@/components/misc/Loading";
+import { FlashList } from "@shopify/flash-list";
 
 const LocationScreen = () => {
   const { postalCode } = useUser((state) => state.location);
@@ -140,8 +141,21 @@ const LocationScreen = () => {
           containerStyles={{ marginVertical: 20 }}
         />
         <Divider />
-        <View className="w-full">
+        <View className="w-full flex-1">
           <Text className="font-pbold text-lg">Saved Addresses</Text>
+          <FlashList
+            data={[]}
+            renderItem={() => <></>}
+            estimatedItemSize={50}
+            ListHeaderComponent={() => (
+              <Button
+                title="New Address"
+                variant={"outline-secondary"}
+                onPress={() => router.push("/address/new-address")}
+              />
+            )}
+            ListHeaderComponentStyle={{ marginVertical: 20 }}
+          />
         </View>
       </View>
       <Loading isVisible={locationFromPinMutation.isPending} />

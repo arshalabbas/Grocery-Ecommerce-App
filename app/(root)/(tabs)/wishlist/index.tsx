@@ -1,3 +1,4 @@
+import WishlistSkeleton from "@/components/skeletons/WishlistSkeleton";
 import ActionButton from "@/components/ui/ActionButton";
 import WishlistCard from "@/components/wishlist/WishlistCard";
 import { icons } from "@/constants";
@@ -13,10 +14,12 @@ const WishList = () => {
   const router = useRouter();
   const { district } = useUser((state) => state.location);
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["wishlists", district],
     queryFn: () => getWishlists({ district }),
   });
+
+  if (isLoading) return <WishlistSkeleton />;
 
   return (
     <View className="flex-1">
