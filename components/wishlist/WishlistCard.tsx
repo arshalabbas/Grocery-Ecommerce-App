@@ -16,7 +16,7 @@ import Button from "../ui/Button";
 import { useWishlistStore } from "@/stores/useWishlistStore";
 import ActionButton from "../ui/ActionButton";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateManyWishlistItems } from "@/lib/api/wishlist.api";
+import { editWishlistItems } from "@/lib/api/wishlist.api";
 import Loading from "../misc/Loading";
 
 interface Props {
@@ -32,11 +32,13 @@ const WishlistCard = ({ id, title, itemsLength, items, totalPrice }: Props) => {
   const router = useRouter();
   const [expanded, setExpanded] = useState(false);
   const hasChanged = useWishlistStore((state) => state.hasChanged);
-  const setHasChanged = useWishlistStore((state) => state.setHasChanged);
+  const clearWishlistProducts = useWishlistStore(
+    (state) => state.clearWishlistProducts,
+  );
   const getAllProducts = useWishlistStore((state) => state.getAllProducts);
 
   const updateAllMutation = useMutation({
-    mutationFn: updateManyWishlistItems,
+    mutationFn: editWishlistItems,
   });
 
   const initialHeight = itemsLength > 3 ? 300 : itemsLength * 100;
@@ -57,21 +59,19 @@ const WishlistCard = ({ id, title, itemsLength, items, totalPrice }: Props) => {
   };
 
   useEffect(() => {
+    clearWishlistProducts(id);
     height.value = itemsLength > 3 ? 300 : itemsLength * 100;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itemsLength]);
 
   const saveHandler = () => {
     updateAllMutation.mutate(
-      { id, products: getAllProducts(id) },
+      { id, items: getAllProducts(id) },
       {
         onSuccess: () => {
-          setHasChanged(false);
+          clearWishlistProducts(id);
           queryClient.invalidateQueries({ queryKey: ["wishlists"] });
           queryClient.invalidateQueries({ queryKey: ["products"] });
-        },
-        onError: (error) => {
-          console.log(error);
         },
       },
     );
@@ -158,7 +158,7 @@ const WishlistCard = ({ id, title, itemsLength, items, totalPrice }: Props) => {
         <Text className="font-pbold text-2xl">₹{totalPrice}</Text>
         {itemsLength > 0 && (
           <View>
-            {hasChanged ? (
+            {hasChanged[id] ? (
               <ActionButton
                 title="Save changes"
                 iconLeft={icons.save}

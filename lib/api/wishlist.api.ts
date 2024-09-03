@@ -77,22 +77,19 @@ export const editWishlist = ({ id, title }: { id: string; title: string }) => {
   });
 };
 
-// Add item to wishlist
-export const addToWishlist = ({
+// Edit the wishlist items
+export const editWishlistItems = ({
   id,
-  productId,
-  quantity,
+  items,
 }: {
   id: string;
-  productId: string;
-  quantity: number;
+  items: { id: string; quantity: number }[];
 }) => {
-  return new Promise<Wishlist>((resolve, reject) => {
+  return new Promise<{ message: string }>((resolve, reject) => {
     api
       .post(`/wishlist/item`, {
         wishlist_id: id,
-        product_id: productId,
-        quantity,
+        items,
       })
       .then((response) => {
         resolve(response.data);

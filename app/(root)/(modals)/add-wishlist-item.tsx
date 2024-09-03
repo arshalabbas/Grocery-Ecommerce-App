@@ -2,7 +2,7 @@ import Loading from "@/components/misc/Loading";
 import ActionButton from "@/components/ui/ActionButton";
 import IconRadioButton from "@/components/ui/IconRadioButton";
 import { icons } from "@/constants";
-import { addToWishlist, getWishlists } from "@/lib/api/wishlist.api";
+import { editWishlistItems, getWishlists } from "@/lib/api/wishlist.api";
 import { useUser } from "@/stores/useUserStore";
 import { FlashList } from "@shopify/flash-list";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -11,9 +11,11 @@ import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { Text, TouchableOpacity, View } from "react-native";
 import * as Haptics from "expo-haptics";
 import AddtoWislistSkeleton from "@/components/skeletons/AddtoWislistSkeleton";
+import { useWishlistStore } from "@/stores/useWishlistStore";
 
 const AddWishListItem = () => {
   const queryClient = useQueryClient();
+  const setQuantity = useWishlistStore((state) => state.setQuantity);
   const { id, title, image } = useLocalSearchParams<{
     id: string;
     title: string;
@@ -28,15 +30,16 @@ const AddWishListItem = () => {
   });
 
   const addItemMutation = useMutation({
-    mutationFn: addToWishlist,
+    mutationFn: editWishlistItems,
   });
 
   const onPressWishListCard = (wishlistId: string, hasWishlistd: boolean) => {
     Haptics.selectionAsync();
     addItemMutation.mutate(
-      { id: wishlistId, productId: id, quantity: hasWishlistd ? 0 : 1 },
+      { id: wishlistId, items: [{ id, quantity: hasWishlistd ? 0 : 1 }] },
       {
         onSuccess: () => {
+          setQuantity(wishlistId, id, hasWishlistd ? 0 : 1);
           queryClient.invalidateQueries({
             queryKey: ["products"],
           });
@@ -82,7 +85,7 @@ const AddWishListItem = () => {
         </View>
         {/* Wishlists */}
         <FlashList
-          data={data}
+          data={data?.toReversed()}
           renderItem={({ item }) => {
             const hasWishlisted = item.items.find(
               (item) => item.product.id === id,

@@ -43,6 +43,9 @@ const WishlistItemCard = ({
   );
 
   const setQuantity = useWishlistStore((state) => state.setQuantity);
+  const clearWishlistProducts = useWishlistStore(
+    (state) => state.clearWishlistProducts,
+  );
 
   const scale = useSharedValue<number>(1);
 
@@ -59,6 +62,7 @@ const WishlistItemCard = ({
   }));
 
   useEffect(() => {
+    clearWishlistProducts(wishlistId);
     setQuantity(wishlistId, id, quantity);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quantity]);

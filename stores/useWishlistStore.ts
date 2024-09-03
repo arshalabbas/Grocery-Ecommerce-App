@@ -6,7 +6,7 @@ interface WishlistState {
       [productId: string]: number;
     };
   };
-  hasChanged: boolean;
+  hasChanged: { [wishlistId: string]: boolean };
   incrementQuantity: (wishlistId: string, productId: string) => void;
   decrementQuantity: (wishlistId: string, productId: string) => void;
   setQuantity: (
@@ -15,12 +15,13 @@ interface WishlistState {
     quantity: number,
   ) => void;
   getAllProducts: (wishlistId: string) => { id: string; quantity: number }[];
-  setHasChanged: (changed: boolean) => void;
+  setHasChanged: (wishlistId: string, changed: boolean) => void;
+  clearWishlistProducts: (wishlistId: string) => void;
 }
 
 export const useWishlistStore = create<WishlistState>((set, get) => ({
   quantities: {},
-  hasChanged: false,
+  hasChanged: {},
 
   incrementQuantity: (wishlistId, productId) => {
     set((state) => ({
@@ -28,10 +29,16 @@ export const useWishlistStore = create<WishlistState>((set, get) => ({
         ...state.quantities,
         [wishlistId]: {
           ...state.quantities[wishlistId], // preserve other products
-          [productId]: (state.quantities[wishlistId]?.[productId] || 0) + 1,
+          [productId]: Math.min(
+            (state.quantities[wishlistId]?.[productId] || 0) + 1,
+            10,
+          ),
         },
       },
-      hasChanged: true,
+      hasChanged: {
+        ...state.hasChanged,
+        [wishlistId]: true,
+      },
     }));
   },
 
@@ -47,7 +54,10 @@ export const useWishlistStore = create<WishlistState>((set, get) => ({
           ),
         },
       },
-      hasChanged: true,
+      hasChanged: {
+        ...state.hasChanged,
+        [wishlistId]: true,
+      },
     }));
   },
 
@@ -60,7 +70,10 @@ export const useWishlistStore = create<WishlistState>((set, get) => ({
           [productId]: quantity,
         },
       },
-      hasChanged: false,
+      hasChanged: {
+        ...state.hasChanged,
+        [wishlistId]: false,
+      },
     }));
   },
   getAllProducts: (wishlistId) => {
@@ -74,7 +87,29 @@ export const useWishlistStore = create<WishlistState>((set, get) => ({
       quantity,
     }));
   },
-  setHasChanged: (changed) => {
-    set((state) => ({ ...state, hasChanged: changed }));
+  setHasChanged: (wishlistId, changed) => {
+    set((state) => ({
+      ...state,
+      hasChanged: { ...state.hasChanged, [wishlistId]: changed },
+    }));
+  },
+  clearWishlistProducts: (wishlistId) => {
+    set((state) => {
+      const updatedWishlist = { ...state.quantities[wishlistId] };
+
+      for (const productId in updatedWishlist) {
+        if (updatedWishlist[productId] === 0) {
+          delete updatedWishlist[productId];
+        }
+      }
+
+      return {
+        quantities: {
+          ...state.quantities,
+          [wishlistId]: updatedWishlist,
+        },
+        hasChanged: { ...state.hasChanged, [wishlistId]: false },
+      };
+    });
   },
 }));
