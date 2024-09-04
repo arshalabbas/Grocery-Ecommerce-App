@@ -72,3 +72,15 @@ export interface Wishlist {
   number_of_items: number;
   total_price: number;
 }
+
+// Address Types
+export interface Address {
+  id: string;
+  name: string;
+  phone: string;
+  alt_phone: string;
+  city_or_town: string;
+  pin: string;
+  district: string;
+  landmark: string;
+}

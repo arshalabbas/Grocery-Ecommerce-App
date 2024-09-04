@@ -1,5 +1,6 @@
-import { PostOfficeData } from "@/types";
+import { Address, PostOfficeData } from "@/types";
 import axios from "axios";
+import api from "./axios";
 
 export const fetchLocationfromPin = (pinCode: string) => {
   return new Promise<PostOfficeData>((resolve, reject) => {
@@ -14,6 +15,34 @@ export const fetchLocationfromPin = (pinCode: string) => {
       })
       .catch((error) => {
         reject(error);
+      });
+  });
+};
+
+// Get all addresses
+export const getAllAddresses = ({ district }: { district?: string }) => {
+  return new Promise<Address[]>((resolve, reject) => {
+    api
+      .get("/customer/address", { params: { district } })
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        reject(error.response.data);
+      });
+  });
+};
+
+// Add a new Address
+export const addNewAddress = (address: Omit<Address, "id">) => {
+  return new Promise<{ message: string }>((resolve, reject) => {
+    api
+      .post("/customer/add-address", address)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        reject(error.response.data);
       });
   });
 };

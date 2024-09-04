@@ -10,8 +10,15 @@ import { useUser } from "@/stores/useUserStore";
 import InputField from "@/components/form/InputFeld";
 import Divider from "@/components/ui/Divider";
 import Button from "@/components/ui/Button";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { addNewAddress } from "@/lib/api/location.api";
+import { Address } from "@/types";
+import { useRouter } from "expo-router";
+import Loading from "@/components/misc/Loading";
 
 const NewAddress = () => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
   const user = useUser((state) => state.user);
   const location = useUser((state) => state.location);
 
@@ -31,9 +38,30 @@ const NewAddress = () => {
     resolver: zodResolver(addressSchema),
   });
 
+  const addAddressMutation = useMutation({
+    mutationFn: addNewAddress,
+  });
+
   const onSubmit = (values: AddressSchema) => {
-    // TODO: Add new address to user's address array
-    console.log("New Address:", values);
+    const addressData: Omit<Address, "id"> = {
+      name: values.name,
+      phone: values.phone,
+      alt_phone: values.altPhone || "",
+      city_or_town: values.city,
+      pin: values.pincode,
+      district: values.district,
+      landmark: values.landmark,
+    };
+    addAddressMutation.mutate(addressData, {
+      onSuccess: () => {
+        console.log("added");
+        queryClient.invalidateQueries({ queryKey: ["address"] });
+        router.back();
+      },
+      onError: (error) => {
+        console.log("Error adding new address:", error.message);
+      },
+    });
   };
 
   return (
@@ -153,7 +181,7 @@ const NewAddress = () => {
               onChangeText={onChange}
               onBlur={onBlur}
               containerStyle="mb-4"
-              error={errors.district && errors.district.message}
+              error={errors.landmark && errors.landmark.message}
             />
           )}
         />
@@ -162,6 +190,7 @@ const NewAddress = () => {
       <View className="p-5">
         <Button title="Save" onPress={handleSubmit(onSubmit)} />
       </View>
+      <Loading isVisible={addAddressMutation.isPending} />
     </View>
   );
 };

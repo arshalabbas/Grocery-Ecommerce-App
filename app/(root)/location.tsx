@@ -1,8 +1,14 @@
-import { Text, TouchableOpacity, View } from "react-native";
-import React, { useEffect } from "react";
+import {
+  ActivityIndicator,
+  Text,
+  TouchableOpacity,
+  View,
+  ScrollView,
+} from "react-native";
+import React, { useEffect, useRef } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Image } from "expo-image";
-import { icons } from "@/constants";
+import { colors, icons } from "@/constants";
 import { useNavigation, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import Button from "@/components/ui/Button";
@@ -10,8 +16,8 @@ import InputField from "@/components/form/InputFeld";
 import Divider from "@/components/ui/Divider";
 import { useUser } from "@/stores/useUserStore";
 import * as Location from "expo-location";
-import { useMutation } from "@tanstack/react-query";
-import { fetchLocationfromPin } from "@/lib/api/location.api";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { fetchLocationfromPin, getAllAddresses } from "@/lib/api/location.api";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,6 +27,12 @@ import { FlashList } from "@shopify/flash-list";
 const LocationScreen = () => {
   const { postalCode } = useUser((state) => state.location);
   const setLocation = useUser((state) => state.setLocation);
+  const navigationRef = useRef<() => void>();
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["address"],
+    queryFn: () => getAllAddresses({}),
+  });
 
   const router = useRouter();
   const navigation = useNavigation();
@@ -59,9 +71,29 @@ const LocationScreen = () => {
           district: data.District,
         });
 
+        if (navigationRef.current) navigationRef.current();
+
         router.back();
       },
     });
+  };
+
+  const onPressSavedAddress = (address: {
+    postalCode: string;
+    place: string;
+    city: string;
+    district: string;
+  }) => {
+    setLocation({
+      postalCode: address.postalCode,
+      place: address.district,
+      city: address.city,
+      district: address.district,
+    });
+
+    if (navigationRef.current) navigationRef.current();
+
+    router.back();
   };
 
   const onSubmit = ({ pincode }: { pincode: string }) => {
@@ -74,6 +106,8 @@ const LocationScreen = () => {
           district: data.District,
         });
 
+        if (navigationRef.current) navigationRef.current();
+
         router.back();
       },
       onError: (error) => {
@@ -83,13 +117,19 @@ const LocationScreen = () => {
   };
 
   useEffect(() => {
-    navigation.addListener("beforeRemove", (e) => {
+    navigationRef.current = navigation.addListener("beforeRemove", (e) => {
       e.preventDefault();
       if (postalCode !== "") {
         navigation.dispatch(e.data.action);
       }
       return;
     });
+
+    return () => {
+      if (navigationRef.current) {
+        navigationRef.current();
+      }
+    };
   }, [navigation, postalCode]);
 
   return (
@@ -110,7 +150,10 @@ const LocationScreen = () => {
           </Text>
         </TouchableOpacity>
       </View>
-      <View className="flex-1 items-center p-5">
+      <ScrollView
+        className="flex-1 p-5"
+        contentContainerStyle={{ alignItems: "center" }}
+      >
         <Button
           title="Use current location"
           icon={icons.gps}
@@ -136,7 +179,7 @@ const LocationScreen = () => {
 
         <Button
           title="Save"
-          variant={"solid-secondary"}
+          variant={"solid-primary"}
           onPress={handleSubmit(onSubmit)}
           containerStyles={{ marginVertical: 20 }}
         />
@@ -144,20 +187,67 @@ const LocationScreen = () => {
         <View className="w-full flex-1">
           <Text className="font-pbold text-lg">Saved Addresses</Text>
           <FlashList
-            data={[]}
-            renderItem={() => <></>}
+            data={data?.toReversed()}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                className="mb-4 w-full flex-row space-x-2 rounded-xl bg-white p-4"
+                activeOpacity={0.7}
+                onPress={() =>
+                  onPressSavedAddress({
+                    postalCode: item.pin,
+                    city: item.city_or_town,
+                    district: item.district,
+                    place: item.city_or_town,
+                  })
+                }
+              >
+                <Image
+                  source={icons.location}
+                  className="aspect-square w-6"
+                  contentFit="contain"
+                />
+                <View>
+                  <Text className="font-pbold text-lg text-secondary">
+                    {item.name}
+                  </Text>
+                  <Text className="font-psemibold text-xs text-secondary-muted">
+                    {item.phone}
+                  </Text>
+                  <Text className="font-pmedium text-xs text-secondary-muted">
+                    {item.pin} • {item.district}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            )}
             estimatedItemSize={50}
             ListHeaderComponent={() => (
               <Button
                 title="New Address"
-                variant={"outline-secondary"}
+                variant={"outline-primary"}
+                size={"md"}
                 onPress={() => router.push("/address/new-address")}
               />
             )}
             ListHeaderComponentStyle={{ marginVertical: 20 }}
+            ListEmptyComponent={() => (
+              <View className="w-full items-center">
+                {isLoading ? (
+                  <ActivityIndicator
+                    color={colors.primary.DEFAULT}
+                    size={"small"}
+                  />
+                ) : (
+                  <Text className="font-psemibold text-secondary-muted">
+                    You haven't added any addresses.
+                  </Text>
+                )}
+              </View>
+            )}
+            ListFooterComponent={<View className="my-4" />}
           />
         </View>
-      </View>
+      </ScrollView>
       <Loading isVisible={locationFromPinMutation.isPending} />
       <StatusBar style="dark" backgroundColor="white" />
     </SafeAreaView>

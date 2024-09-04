@@ -73,6 +73,7 @@ const ProductCard = ({
         <Image
           source={image}
           contentFit="contain"
+          transition={300}
           className="aspect-square w-[100px]"
         />
         <View className="w-full flex-row justify-between">

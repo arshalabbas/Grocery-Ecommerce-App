@@ -22,12 +22,12 @@ const AxiosProvider = ({ children }: { children: ReactNode }) => {
         console.log(error.config.url);
 
         if (typeof error.response === "undefined") {
-          // TODO: Handle network error
-          alert(
-            "A server/network error occurred. " +
-              "Looks like CORS might be the problem. " +
-              "Sorry about this - we will get it fixed shortly.",
-          );
+          router.push("/network-error");
+          // alert(
+          //   "A server/network error occurred. " +
+          //     "Looks like CORS might be the problem. " +
+          //     "Sorry about this - we will get it fixed shortly.",
+          // );
           return Promise.reject(error);
         }
 

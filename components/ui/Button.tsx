@@ -91,8 +91,8 @@ const buttonContainerStyles = cva(
       variant: {
         "solid-primary": "bg-primary",
         "solid-secondary": "bg-secondary",
-        "outline-primary": "border border-primary",
-        "outline-secondary": "border border-secondary",
+        "outline-primary": "border border-primary bg-white",
+        "outline-secondary": "border border-secondary bg-white",
         "solid-white": "border-[0.5px] border-secondary-muted/50 bg-white",
       },
       rounded: {

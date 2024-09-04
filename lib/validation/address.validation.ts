@@ -13,13 +13,16 @@ export const addressSchema = z.object({
   landmark: z
     .string()
     .min(3, "Landmark must be at least 3 characters.")
-    .max(20, "Landmark cannot exceed 20 characters."),
+    .max(40, "Landmark cannot exceed 40 characters."),
   pincode: z.string().length(6, "Pincode must be at least 6 characters."),
   city: z
     .string()
     .min(3, "Landmark must be at least 3 characters.")
     .max(20, "Landmark cannot exceed 20 characters."),
-  district: z.string(),
+  district: z
+    .string()
+    .min(3, "District must be at least 3 characters.")
+    .max(20, "District cannot exceed 20 characters."),
 });
 
 export type AddressSchema = z.infer<typeof addressSchema>;
