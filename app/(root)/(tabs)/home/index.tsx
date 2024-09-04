@@ -38,7 +38,7 @@ const Home = () => {
     isSuccess: isCategorySuccess,
     isLoading: isCategoriesLoading,
   } = useQuery({
-    queryKey: ["sub-categories"],
+    queryKey: ["sub-categories", postLocation?.District],
     queryFn: () => getSubCategories({ district: postLocation?.District }),
     enabled: isLocationSuccess,
   });

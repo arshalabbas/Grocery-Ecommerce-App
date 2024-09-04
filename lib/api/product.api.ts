@@ -42,7 +42,7 @@ export const getProduct = ({ id }: { id: string }) => {
 export const getSubCategories = ({ district }: { district?: string }) => {
   return new Promise<SubCategory[]>((resolve, reject) => {
     api
-      .get(`/product/sub-category/`, { params: { district } })
+      .get(`/product/sub-category/?district=${district}`)
       .then((response) => {
         resolve(response.data);
       })
