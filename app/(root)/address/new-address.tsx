@@ -54,7 +54,6 @@ const NewAddress = () => {
     };
     addAddressMutation.mutate(addressData, {
       onSuccess: () => {
-        console.log("added");
         queryClient.invalidateQueries({ queryKey: ["address"] });
         router.back();
       },

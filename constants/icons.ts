@@ -7,6 +7,7 @@ import search from "@/assets/icons/search.svg";
 import angleDown from "@/assets/icons/angle-down.svg";
 import gps from "@/assets/icons/gps.svg";
 import bag from "@/assets/icons/bag.svg";
+import bagSuccess from "@/assets/icons/bag-success.svg";
 import arrowLeft from "@/assets/icons/arrow-left.svg";
 import info from "@/assets/icons/info.svg";
 import xmark from "@/assets/icons/xmark.svg";
@@ -67,6 +68,7 @@ export default {
   arrowLeft,
   gps,
   bag,
+  bagSuccess,
   heart,
   info,
   xmark,

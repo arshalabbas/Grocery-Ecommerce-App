@@ -1,4 +1,5 @@
 import CartButton from "@/components/cart/CartButton";
+import FloatingCart from "@/components/cart/FloatingCart";
 import Loading from "@/components/misc/Loading";
 import ProductCard from "@/components/ProductCard";
 import ScreenHeader from "@/components/ScreenHeader";
@@ -9,10 +10,11 @@ import { useUser } from "@/stores/useUserStore";
 import { FlashList } from "@shopify/flash-list";
 import { useQuery } from "@tanstack/react-query";
 import { Image } from "expo-image";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { Text, View } from "react-native";
 
 const ProductScreen = () => {
+  const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { district } = useUser((state) => state.location);
 
@@ -33,7 +35,12 @@ const ProductScreen = () => {
       <Stack.Screen
         options={{
           headerShown: true,
-          header: () => <ScreenHeader rightIcon={icons.cart} />,
+          header: () => (
+            <ScreenHeader
+              rightIcon={icons.search}
+              onRightPress={() => router.push("/(root)/search")}
+            />
+          ),
         }}
       />
 
@@ -82,7 +89,6 @@ const ProductScreen = () => {
         contentContainerStyle={{ paddingHorizontal: 12, paddingVertical: 5 }}
         keyExtractor={(item) => item.id}
         ListEmptyComponent={() => <Text>Empty List</Text>}
-        ListFooterComponent={<View className="mb-20" />}
         data={products?.filter((product) => product.id !== id)}
         numColumns={2}
         estimatedItemSize={100}
@@ -97,6 +103,13 @@ const ProductScreen = () => {
             hasWishlisted={item.in_wishlist}
           />
         )}
+        ListFooterComponent={() => (
+          <View className="my-10">
+            <Text className="text-center font-psemibold text-secondary-muted">
+              You're at the end!
+            </Text>
+          </View>
+        )}
       />
       <ActionButton
         title="Instant Buy"
@@ -108,6 +121,7 @@ const ProductScreen = () => {
         }}
       />
       <Loading isVisible={isLoading} />
+      <FloatingCart className="absolute bottom-0 mb-5" />
     </View>
   );
 };

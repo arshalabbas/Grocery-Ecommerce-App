@@ -1,7 +1,6 @@
 import { Image, ImageSource } from "expo-image";
 import { View, Text, Pressable } from "react-native";
 import { icons } from "@/constants";
-import IconButton from "./ui/IconButton";
 import IconRadioButton from "./ui/IconRadioButton";
 import Animated, {
   LightSpeedInLeft,
@@ -12,6 +11,7 @@ import Animated, {
 import { Link, useRouter } from "expo-router";
 import { memo } from "react";
 import * as Haptics from "expo-haptics";
+import ProductCartButton from "./cart/ProductCartButton";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -89,7 +89,13 @@ const ProductCard = ({
               ₹{price}/{unit}
             </Text>
           </View>
-          <IconButton icon={icons.bag} />
+          <ProductCartButton
+            id={id}
+            image={image}
+            price={price}
+            title={title}
+            unit={unit}
+          />
         </View>
         {badgeText && (
           <Animated.View

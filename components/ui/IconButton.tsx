@@ -13,7 +13,7 @@ interface Props extends PressableProps {
   icon: ImageSource;
 }
 
-const IconButton = ({ containerStyles, icon, ...props }: Props) => {
+const IconButton = ({ containerStyles, className, icon, ...props }: Props) => {
   const scale = useSharedValue<number>(1);
 
   const onPressIn = () => {
@@ -33,8 +33,8 @@ const IconButton = ({ containerStyles, icon, ...props }: Props) => {
       onPressIn={onPressIn}
       onPressOut={onPressOut}
       className="aspect-square flex-row items-center justify-center rounded-full bg-primary p-3"
-      {...props}
       style={[animatedStyles, containerStyles]}
+      {...props}
     >
       <Image source={icon} className="aspect-square w-5" contentFit="contain" />
     </AnimatedPressable>

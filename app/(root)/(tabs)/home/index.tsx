@@ -13,6 +13,7 @@ import { fetchLocationfromPin } from "@/lib/api/location.api";
 import { FlashList } from "@shopify/flash-list";
 import { colors } from "@/constants";
 import HomeContentSkeleton from "@/components/skeletons/HomeContentSkeleton";
+import FloatingCart from "@/components/cart/FloatingCart";
 
 const Home = () => {
   const userLocation = useUser((state) => state.location);
@@ -145,9 +146,17 @@ const Home = () => {
               hasWishlisted={item.in_wishlist}
             />
           )}
+          ListFooterComponent={() => (
+            <View className="my-10">
+              <Text className="text-center font-psemibold text-secondary-muted">
+                You're at the end!
+              </Text>
+            </View>
+          )}
         />
       )}
       {/* <Loading isVisible={isLoading} /> */}
+      <FloatingCart className="absolute bottom-0 mb-2" />
       <StatusBar style="dark" />
     </View>
   );

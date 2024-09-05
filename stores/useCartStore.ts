@@ -39,28 +39,53 @@ export const useCartStore = create<CartState>()((set) => ({
     });
   },
   incrementQuantity: (productId) => {
-    set((state) => ({
-      products: state.products.map((product) =>
-        product.id === productId
-          ? { ...product, quantity: product.quantity + 1 }
-          : product,
-      ),
-    }));
+    let incrementedProduct: Product;
+    set((state) => {
+      const updatedProducts = state.products.map((product) => {
+        if (product.id === productId) {
+          incrementedProduct = { ...product, quantity: product.quantity + 1 };
+          return incrementedProduct;
+        } else {
+          return product;
+        }
+      });
+
+      return {
+        products: [
+          ...updatedProducts.filter((product) => product.id !== productId),
+          incrementedProduct,
+        ],
+      };
+    });
   },
   decrementQuantity: (productId) => {
-    set((state) => ({
-      products: state.products
+    set((state) => {
+      let decrementedProduct: Product | undefined;
+
+      const updatedProducts = state.products
         .map((product) => {
           if (product.id === productId) {
             const decremented = product.quantity - 1;
-            if (decremented <= 0) return undefined;
-            return { ...product, quantity: decremented };
-          } else {
-            return product;
+            if (decremented <= 0) return undefined; // Return undefined to remove the product
+            decrementedProduct = { ...product, quantity: decremented };
+            return decrementedProduct;
           }
+          return product;
         })
-        .filter((product) => product !== undefined) as Product[],
-    }));
+        .filter((product) => product !== undefined) as Product[];
+
+      // If a product was decremented, move it to the end of the array
+      if (decrementedProduct) {
+        return {
+          products: [
+            ...updatedProducts.filter((product) => product.id !== productId),
+            decrementedProduct,
+          ],
+        };
+      }
+
+      return { products: updatedProducts };
+    });
   },
 
   removeProduct: (productId) => {

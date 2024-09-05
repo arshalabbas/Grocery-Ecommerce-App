@@ -1,3 +1,4 @@
+import FloatingCart from "@/components/cart/FloatingCart";
 import SearchInput from "@/components/form/SearchInput";
 import { getProducts } from "@/lib/api/product.api";
 import { useUser } from "@/stores/useUserStore";
@@ -27,7 +28,7 @@ const SearchScreen = () => {
   }, 500);
 
   return (
-    <SafeAreaView className="flex-1 bg-background px-5">
+    <SafeAreaView className="w-full flex-1 px-5">
       <SearchInput
         value={searchQuery}
         onChangeText={(text) => {
@@ -44,6 +45,7 @@ const SearchScreen = () => {
         renderItem={({ item }) => <Text>{item.title}</Text>}
         estimatedItemSize={100}
       />
+      <FloatingCart className="mb-5 px-0" />
     </SafeAreaView>
   );
 };
