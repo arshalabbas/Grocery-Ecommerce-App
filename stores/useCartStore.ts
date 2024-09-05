@@ -13,8 +13,8 @@ interface Product {
 interface CartState {
   products: Product[];
   addProduct: (product: Product) => void;
-  incrementQuantity: (productId: string) => void;
-  decrementQuantity: (productId: string) => void;
+  incrementQuantity: (productId: string, rePosition?: boolean) => void;
+  decrementQuantity: (productId: string, rePosition?: boolean) => void;
   removeProduct: (productId: string) => void;
   clearCart: () => void;
 }
@@ -38,7 +38,7 @@ export const useCartStore = create<CartState>()((set) => ({
       } else return { products: [...state.products, product] };
     });
   },
-  incrementQuantity: (productId) => {
+  incrementQuantity: (productId, rePosition = true) => {
     let incrementedProduct: Product;
     set((state) => {
       const updatedProducts = state.products.map((product) => {
@@ -50,15 +50,17 @@ export const useCartStore = create<CartState>()((set) => ({
         }
       });
 
-      return {
-        products: [
-          ...updatedProducts.filter((product) => product.id !== productId),
-          incrementedProduct,
-        ],
-      };
+      if (rePosition)
+        return {
+          products: [
+            ...updatedProducts.filter((product) => product.id !== productId),
+            incrementedProduct,
+          ],
+        };
+      else return { products: updatedProducts };
     });
   },
-  decrementQuantity: (productId) => {
+  decrementQuantity: (productId, rePosition = true) => {
     set((state) => {
       let decrementedProduct: Product | undefined;
 
@@ -76,12 +78,14 @@ export const useCartStore = create<CartState>()((set) => ({
 
       // If a product was decremented, move it to the end of the array
       if (decrementedProduct) {
-        return {
-          products: [
-            ...updatedProducts.filter((product) => product.id !== productId),
-            decrementedProduct,
-          ],
-        };
+        if (rePosition)
+          return {
+            products: [
+              ...updatedProducts.filter((product) => product.id !== productId),
+              decrementedProduct,
+            ],
+          };
+        else return { products: updatedProducts };
       }
 
       return { products: updatedProducts };

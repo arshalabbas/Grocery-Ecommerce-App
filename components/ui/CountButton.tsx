@@ -1,7 +1,8 @@
 import { icons } from "@/constants";
 import { Image } from "expo-image";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity } from "react-native";
 import ActionButton from "./ActionButton";
+import CountText from "../misc/CountText";
 
 interface Props {
   count: number;
@@ -32,7 +33,7 @@ const CountButton = ({ count, onIncrementCount, onDecrementCount }: Props) => {
           contentFit="contain"
         />
       </TouchableOpacity>
-      <Text>{count}</Text>
+      <CountText className="font-pregular text-secondary" count={count} />
       <TouchableOpacity>
         <TouchableOpacity
           className="aspect-square rounded-full border-[.5px] border-secondary-muted/50 bg-white p-3"

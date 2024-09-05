@@ -1,8 +1,8 @@
 import CartButton from "@/components/cart/CartButton";
 import FloatingCart from "@/components/cart/FloatingCart";
-import Loading from "@/components/misc/Loading";
 import ProductCard from "@/components/ProductCard";
 import ScreenHeader from "@/components/ScreenHeader";
+import ProductSkeleton from "@/components/skeletons/ProductSkeleton";
 import ActionButton from "@/components/ui/ActionButton";
 import { icons } from "@/constants";
 import { getProduct, getProducts } from "@/lib/api/product.api";
@@ -29,6 +29,8 @@ const ProductScreen = () => {
       getProducts({ district: district, category: data?.sub_category.title }),
     enabled: isSuccess,
   });
+
+  if (isLoading) return <ProductSkeleton />;
 
   return (
     <View className="flex-1 bg-background">
@@ -120,7 +122,6 @@ const ProductScreen = () => {
           right: 20,
         }}
       />
-      <Loading isVisible={isLoading} />
       <FloatingCart className="absolute bottom-0 mb-5" />
     </View>
   );

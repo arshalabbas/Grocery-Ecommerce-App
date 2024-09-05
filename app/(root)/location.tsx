@@ -191,7 +191,7 @@ const LocationScreen = () => {
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => (
               <TouchableOpacity
-                className="mb-4 w-full flex-row space-x-2 rounded-xl bg-white p-4"
+                className="mb-4 w-full flex-row items-center space-x-2 rounded-xl bg-white p-4"
                 activeOpacity={0.7}
                 onPress={() =>
                   onPressSavedAddress({

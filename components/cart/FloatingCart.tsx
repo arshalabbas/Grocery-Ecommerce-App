@@ -6,11 +6,13 @@ import { useUser } from "@/stores/useUserStore";
 import ImageStack from "../misc/ImageStack";
 import { ImageSource } from "expo-image";
 import { twMerge } from "tailwind-merge";
+import { useRouter } from "expo-router";
 
 // interface Props extends ViewProps {
 // }
 
 const FloatingCart = ({ className, ...props }: ViewProps) => {
+  const router = useRouter();
   const location = useUser((state) => state.location);
   const products = useCartStore((state) => state.products).filter(
     (product) => product.district === location.district,
@@ -54,6 +56,7 @@ const FloatingCart = ({ className, ...props }: ViewProps) => {
           width={"no-width"}
           size={"md"}
           rounded={"xl"}
+          onPress={() => router.push("/(root)/cart")}
         />
       </View>
     </Animated.View>
