@@ -24,9 +24,8 @@ const ImageStack = ({ data }: Props) => {
               key={item.key}
               className={clsx(
                 "aspect-square w-14 overflow-hidden rounded-lg border-[.5px] border-secondary-muted bg-white",
-                { "-ml-11": index > 0 },
+                { "-ml-12": index > 0 },
               )}
-              // style={{ marginLeft: index > 0 ? -45 : 0 }}
             >
               <Image
                 transition={300}

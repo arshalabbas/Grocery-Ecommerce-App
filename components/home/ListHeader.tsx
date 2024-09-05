@@ -48,7 +48,7 @@ const ListHeader = ({
           {subCategories.map((item, index) => (
             <CategoryItem
               key={item.id}
-              title={`${index % 2 === 0 ? "🍅" : "🥩"} ${item.title}`}
+              title={`${item.emoji} ${item.title}`}
               isActive={item.id === activeCategory.id}
               onPress={() =>
                 setActiveCategory({ id: item.id, title: item.title })

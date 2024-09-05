@@ -1,6 +1,7 @@
 import { useCartStore } from "@/stores/useCartStore";
 import CountButton from "../ui/CountButton";
 import { useUser } from "@/stores/useUserStore";
+import * as Haptics from "expo-haptics";
 
 interface Props {
   id: string;
@@ -20,6 +21,7 @@ const CartButton = ({ id, image, title, price, unit }: Props) => {
   const addProduct = useCartStore((state) => state.addProduct);
 
   const onIncrementQuantity = () => {
+    Haptics.selectionAsync();
     if (cartProduct) {
       incrementQuantity(id);
     } else {
@@ -36,6 +38,7 @@ const CartButton = ({ id, image, title, price, unit }: Props) => {
   };
 
   const onDecrementQuantity = () => {
+    Haptics.selectionAsync();
     decrementQuantity(id);
   };
   return (

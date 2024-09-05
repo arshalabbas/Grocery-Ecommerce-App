@@ -34,21 +34,23 @@ const Cart = () => {
       />
       <FlashList
         data={products}
-        ListHeaderComponent={() => (
-          <View className="mb-5 w-full flex-row justify-end">
-            <ActionButton
-              title="Clear cart"
-              iconLeft={icons.xmark}
-              containerStyles={{ backgroundColor: colors.danger }}
-              onPress={clearCart}
-            />
-          </View>
-        )}
+        ListHeaderComponent={() =>
+          products.length > 0 && (
+            <View className="my-2 w-full flex-row justify-end">
+              <ActionButton
+                title="Clear cart"
+                iconLeft={icons.xmark}
+                containerStyles={{ backgroundColor: colors.danger }}
+                onPress={clearCart}
+              />
+            </View>
+          )
+        }
         renderItem={({ item }) => <CartItemCard id={item.id} />}
         estimatedItemSize={100}
-        contentContainerStyle={{ padding: 20 }}
+        contentContainerStyle={{ paddingHorizontal: 20 }}
         ListEmptyComponent={() => (
-          <View className="flex-1 items-center">
+          <View className="mt-10 flex-1 items-center">
             <Text className="font-psemibold text-xl text-secondary-muted">
               Nothing in the cart!
             </Text>

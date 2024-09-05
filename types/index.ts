@@ -41,6 +41,7 @@ export interface Category {
 export interface SubCategory {
   id: string;
   title: string;
+  emoji: string;
   image: string;
   category: Category;
 }
@@ -52,6 +53,9 @@ export interface ProductData {
   price: number;
   unit: string;
   stock: number;
+  discount: number;
+  mrp: number;
+  fixed_quantity: number;
   sub_category: SubCategory;
   in_wishlist: boolean;
 }

@@ -1,7 +1,7 @@
 import { Image, ImageSource } from "expo-image";
 import { View, Text, Pressable } from "react-native";
 import { icons } from "@/constants";
-import IconRadioButton from "./ui/IconRadioButton";
+import IconRadioButton from "@/components/ui/IconRadioButton";
 import Animated, {
   LightSpeedInLeft,
   useAnimatedStyle,
@@ -11,7 +11,7 @@ import Animated, {
 import { Link, useRouter } from "expo-router";
 import { memo } from "react";
 import * as Haptics from "expo-haptics";
-import ProductCartButton from "./cart/ProductCartButton";
+import ProductCartButton from "@/components/cart/ProductCartButton";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -21,6 +21,8 @@ interface Props {
   title: string;
   unit: string;
   price: number;
+  fixedQuantity: number;
+  mrp: number;
   badgeText?: string;
   hasWishlisted: boolean;
 }
@@ -31,6 +33,8 @@ const ProductCard = ({
   title,
   unit,
   price,
+  mrp,
+  fixedQuantity,
   badgeText,
   hasWishlisted,
 }: Props) => {
@@ -52,7 +56,7 @@ const ProductCard = ({
   return (
     <Link href={`/(root)/product/${id}`} asChild>
       <AnimatedPressable
-        className="m-1 min-h-[230px] flex-1 items-center justify-between overflow-hidden rounded-lg bg-white p-2"
+        className="m-1 min-h-[240px] flex-1 items-center justify-between overflow-hidden rounded-lg bg-white p-2"
         onPressIn={onPressIn}
         onPressOut={onPressOut}
         style={animatedStyles}
@@ -76,17 +80,27 @@ const ProductCard = ({
           transition={300}
           className="aspect-square w-[100px]"
         />
-        <View className="w-full flex-row justify-between">
-          <View className="flex-1 pr-3">
-            <Text
-              className="font-pregular text-sm"
-              numberOfLines={1}
-              style={{ includeFontPadding: false, textAlignVertical: "bottom" }}
-            >
-              {title}
-            </Text>
-            <Text className="font-pmedium">
-              ₹{price}/{unit}
+        <View className="mt-4 w-full">
+          <Text
+            className="w-full font-pmedium text-sm"
+            numberOfLines={1}
+            style={{ includeFontPadding: false, textAlignVertical: "bottom" }}
+          >
+            {title}
+          </Text>
+          <Text
+            className="w-full font-pmedium text-xs text-secondary-muted"
+            style={{ includeFontPadding: false, textAlignVertical: "bottom" }}
+          >
+            {fixedQuantity} {unit}
+          </Text>
+        </View>
+
+        <View className="w-full flex-1 flex-row items-end justify-between">
+          <View className="mr-1 flex-1 flex-row flex-wrap items-center space-x-1">
+            <Text className="font-psemibold text-lg">₹{price}</Text>
+            <Text className="font-pmedium text-xs text-secondary-muted line-through">
+              ₹{mrp}
             </Text>
           </View>
           <ProductCartButton

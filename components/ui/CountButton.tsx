@@ -33,7 +33,11 @@ const CountButton = ({ count, onIncrementCount, onDecrementCount }: Props) => {
           contentFit="contain"
         />
       </TouchableOpacity>
-      <CountText className="font-pregular text-secondary" count={count} />
+      <CountText
+        className="font-pregular text-secondary"
+        count={count}
+        duration={80}
+      />
       <TouchableOpacity>
         <TouchableOpacity
           className="aspect-square rounded-full border-[.5px] border-secondary-muted/50 bg-white p-3"

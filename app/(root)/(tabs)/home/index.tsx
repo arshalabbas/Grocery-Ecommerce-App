@@ -1,4 +1,4 @@
-import { View, Text, RefreshControl, ActivityIndicator } from "react-native";
+import { View, RefreshControl } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Stack, router } from "expo-router";
 import * as Location from "expo-location";
@@ -8,12 +8,10 @@ import { StatusBar } from "expo-status-bar";
 import ListHeader from "@/components/home/ListHeader";
 import { useQuery } from "@tanstack/react-query";
 import { getProducts, getSubCategories } from "@/lib/api/product.api";
-import ProductCard from "@/components/ProductCard";
 import { fetchLocationfromPin } from "@/lib/api/location.api";
-import { FlashList } from "@shopify/flash-list";
-import { colors } from "@/constants";
 import HomeContentSkeleton from "@/components/skeletons/HomeContentSkeleton";
 import FloatingCart from "@/components/cart/FloatingCart";
+import ProductList from "@/components/product/ProductList";
 
 const Home = () => {
   const userLocation = useUser((state) => state.location);
@@ -102,8 +100,7 @@ const Home = () => {
       {isPostLocationLoading || isCategoriesLoading ? (
         <HomeContentSkeleton />
       ) : (
-        <FlashList
-          className="w-full flex-1"
+        <ProductList
           refreshControl={
             <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
           }
@@ -114,45 +111,9 @@ const Home = () => {
               activeCategory={activeCategory}
             />
           }
-          showsVerticalScrollIndicator={false}
-          ListHeaderComponentStyle={{ marginBottom: 20 }}
-          contentContainerStyle={{ padding: 12 }}
-          keyExtractor={(item) => item.id}
-          ListEmptyComponent={() => (
-            <View className="w-full flex-1 items-center justify-center">
-              {isLoading ? (
-                <ActivityIndicator
-                  color={colors.primary.DEFAULT}
-                  size={"large"}
-                />
-              ) : (
-                <Text className="font-pbold text-secondary-muted">
-                  No Products Found!
-                </Text>
-              )}
-            </View>
-          )}
+          ListHeaderComponentStyle={{ marginBottom: 10 }}
           data={data}
-          numColumns={2}
-          estimatedItemSize={250}
-          renderItem={({ item }) => (
-            <ProductCard
-              id={item.id}
-              title={item.title}
-              image={item.image}
-              unit={item.unit}
-              price={item.price}
-              badgeText={Math.random() > 0.5 ? "30% Off" : undefined}
-              hasWishlisted={item.in_wishlist}
-            />
-          )}
-          ListFooterComponent={() => (
-            <View className="my-10">
-              <Text className="text-center font-psemibold text-secondary-muted">
-                You're at the end!
-              </Text>
-            </View>
-          )}
+          isLoading={isLoading}
         />
       )}
       {/* <Loading isVisible={isLoading} /> */}
