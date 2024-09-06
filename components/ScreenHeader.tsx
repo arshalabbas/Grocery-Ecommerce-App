@@ -7,6 +7,7 @@ interface Props {
   title?: string;
   hasBack?: boolean;
   rightIcon?: ImageSource;
+  rightIconColor?: string;
   onRightPress?: () => void;
 }
 
@@ -14,6 +15,7 @@ const ScreenHeader = ({
   title,
   hasBack = true,
   rightIcon,
+  rightIconColor,
   onRightPress,
 }: Props) => {
   const router = useRouter();
@@ -48,7 +50,7 @@ const ScreenHeader = ({
               className="aspect-square w-5"
               source={rightIcon}
               contentFit="contain"
-              tintColor={colors.secondary.DEFAULT}
+              tintColor={rightIconColor || colors.secondary.DEFAULT}
             />
           </TouchableOpacity>
         )}

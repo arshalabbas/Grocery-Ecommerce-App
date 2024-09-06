@@ -60,3 +60,23 @@ export const getAddress = ({ id }: { id: string }) => {
       });
   });
 };
+
+// Check the address is servicable
+export const isServicable = ({
+  district,
+  pincode,
+}: {
+  district: string;
+  pincode: string;
+}) => {
+  return new Promise((resolve, reject) => {
+    api
+      .get("/block-area/", { params: { district, pincode } })
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        reject(error.response.data);
+      });
+  });
+};

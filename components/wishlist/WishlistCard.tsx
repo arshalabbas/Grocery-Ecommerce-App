@@ -71,7 +71,7 @@ const WishlistCard = ({ id, title, itemsLength, items, totalPrice }: Props) => {
         onSuccess: () => {
           clearWishlistProducts(id);
           queryClient.invalidateQueries({ queryKey: ["wishlists"] });
-          queryClient.invalidateQueries({ queryKey: ["products"] });
+          queryClient.invalidateQueries({ queryKey: ["product"] });
         },
       },
     );

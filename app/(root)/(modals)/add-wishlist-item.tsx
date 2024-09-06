@@ -41,10 +41,10 @@ const AddWishListItem = () => {
         onSuccess: () => {
           setQuantity(wishlistId, id, hasWishlistd ? 0 : 1);
           queryClient.invalidateQueries({
-            queryKey: ["products"],
+            queryKey: ["wishlists"],
           });
           queryClient.invalidateQueries({
-            queryKey: ["wishlists"],
+            queryKey: ["product"],
           });
         },
       },

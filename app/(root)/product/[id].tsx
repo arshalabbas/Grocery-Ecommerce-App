@@ -22,7 +22,7 @@ const ProductScreen = () => {
   });
 
   const { data: products, isLoading: isProductsLoading } = useQuery({
-    queryKey: ["products", district, data?.sub_category],
+    queryKey: ["product", district, data?.sub_category],
     queryFn: () =>
       getProducts({ district: district, category: data?.sub_category.title }),
     enabled: isSuccess,
@@ -57,6 +57,7 @@ const ProductScreen = () => {
                 mrp={data?.mrp!}
                 fixedQuantity={data?.fixed_quantity!}
                 discount={data?.discount!}
+                hasWishlisted={data?.in_wishlist!}
               />
             }
             data={products?.filter((item) => item.id !== id)}

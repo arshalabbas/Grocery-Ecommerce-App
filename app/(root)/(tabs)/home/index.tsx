@@ -43,7 +43,7 @@ const Home = () => {
   });
 
   const { data, isLoading, refetch, isRefetching } = useQuery({
-    queryKey: ["products", postLocation?.District, activeCategory.title],
+    queryKey: ["product", postLocation?.District, activeCategory.title],
     queryFn: () =>
       getProducts({
         district: postLocation?.District,

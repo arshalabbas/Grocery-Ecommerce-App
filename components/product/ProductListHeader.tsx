@@ -1,9 +1,11 @@
 import { View, Text } from "react-native";
 import CartButton from "../cart/CartButton";
 import { Image, ImageSource } from "expo-image";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import Button from "../ui/Button";
 import Animated, { LightSpeedInLeft } from "react-native-reanimated";
+import IconRadioButton from "../ui/IconRadioButton";
+import { icons } from "@/constants";
 
 interface Props {
   id: string;
@@ -14,6 +16,7 @@ interface Props {
   mrp: number;
   fixedQuantity: number;
   discount: number;
+  hasWishlisted: boolean;
 }
 
 const ProductListHeader = ({
@@ -25,7 +28,9 @@ const ProductListHeader = ({
   mrp,
   fixedQuantity,
   discount,
+  hasWishlisted,
 }: Props) => {
+  const router = useRouter();
   return (
     <View>
       <View className="w-full overflow-hidden rounded-xl bg-white">
@@ -44,6 +49,17 @@ const ProductListHeader = ({
               {discount}% Off
             </Text>
           </Animated.View>
+          <IconRadioButton
+            active={hasWishlisted}
+            icon={icons.heart}
+            className="absolute right-3 top-3"
+            onPress={() =>
+              router.push({
+                pathname: "/(root)/(modals)/add-wishlist-item",
+                params: { id, image: image as string, title },
+              })
+            }
+          />
         </View>
         {/* Product Image - END */}
         {/* Disclaimer - START */}

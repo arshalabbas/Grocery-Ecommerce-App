@@ -94,6 +94,7 @@ const buttonContainerStyles = cva(
         "outline-primary": "border border-primary bg-white",
         "outline-secondary": "border border-secondary bg-white",
         "solid-white": "border-[0.5px] border-secondary-muted/50 bg-white",
+        "solid-disabled": "bg-secondary-muted",
       },
       rounded: {
         pill: "rounded-full",
@@ -127,6 +128,7 @@ const buttonTextStyles = cva(
         "outline-primary": "text-primary",
         "outline-secondary": "text-secondary",
         "solid-white": "text-secondary/80 font-psemibold",
+        "solid-disabled": "text-white",
       },
       size: {
         md: "",
