@@ -1,20 +1,23 @@
 import CartItemCard from "@/components/cart/CartItemCard";
 import CountText from "@/components/misc/CountText";
 import ListItem from "@/components/misc/ListItem";
+import Loading from "@/components/misc/Loading";
 import ScreenHeader from "@/components/ScreenHeader";
 import Button from "@/components/ui/Button";
 import Divider from "@/components/ui/Divider";
 import { colors, icons } from "@/constants";
 import { getAddress, isServicable } from "@/lib/api/location.api";
+import { placeOrder } from "@/lib/api/orders.api";
 import { useCartStore } from "@/stores/useCartStore";
 import { useUser } from "@/stores/useUserStore";
 import { FlashList } from "@shopify/flash-list";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Image } from "expo-image";
 import { Stack, useRouter } from "expo-router";
 import { ActivityIndicator, Text, View } from "react-native";
 
 const Cart = () => {
+  const queryClient = useQueryClient();
   const addressId = useUser((state) => state.location.id);
   const router = useRouter();
   const location = useUser((state) => state.location);
@@ -34,6 +37,7 @@ const Cart = () => {
     enabled: addressId !== undefined,
   });
 
+  // TODO: Fix this
   const { data: servicableData } = useQuery({
     queryKey: ["servicable", location.district, location.postalCode],
     queryFn: () =>
@@ -44,6 +48,28 @@ const Cart = () => {
   });
 
   console.log(servicableData);
+
+  const placeOrderMutation = useMutation({
+    mutationFn: placeOrder,
+  });
+
+  const onPressPlaceOrder = () => {
+    const items = products.map((item) => ({
+      id: item.id,
+      quantity: item.quantity,
+    }));
+
+    placeOrderMutation.mutate(
+      { addressId: addressId!, items },
+      {
+        onSuccess: (data) => {
+          clearCart();
+          queryClient.invalidateQueries({ queryKey: ["order"] });
+          console.log(data);
+        },
+      },
+    );
+  };
 
   return (
     <View className="flex-1 bg-background">
@@ -158,11 +184,17 @@ const Cart = () => {
             title="Place Order"
             width={"no-width"}
             rounded={"xl"}
-            variant={products.length <= 0 ? "solid-disabled" : "solid-primary"}
-            disabled={products.length <= 0}
+            variant={
+              products.length <= 0 || !addressId
+                ? "solid-disabled"
+                : "solid-primary"
+            }
+            onPress={onPressPlaceOrder}
+            disabled={products.length <= 0 || !addressId}
           />
         </View>
       </View>
+      <Loading isVisible={placeOrderMutation.isPending} />
     </View>
   );
 };

@@ -10,6 +10,7 @@ const RootLayout = () => {
       <Stack.Screen name="search/index" />
       <Stack.Screen name="cart/index" />
       <Stack.Screen name="address" />
+      <Stack.Screen name="order/[id]" />
       <Stack.Screen
         name="location"
         options={{ animation: "slide_from_bottom", presentation: "modal" }}

@@ -89,3 +89,46 @@ export interface Address {
   district: string;
   landmark: string;
 }
+
+// orders types
+export type StatusFilter =
+  | "all"
+  | "processing"
+  | "delivered"
+  | "cancelled"
+  | "packed";
+
+export interface PlaceOrder {
+  addressId: string;
+  items: {
+    id: string;
+    quantity: number;
+  }[];
+}
+
+export interface Order {
+  id: string;
+  order_id: string;
+  address: Address;
+  order_date: Date;
+  status: StatusFilter;
+  buy_price: number;
+  can_cancel: boolean;
+  items: {
+    product: ProductData;
+    quantity: number;
+    buy_price: number;
+    buy_total_price: number;
+  }[];
+}
+
+export interface FewerOrder {
+  id: string;
+  order_id: string;
+  order_date: Date;
+  status: StatusFilter;
+  buy_price: number;
+  can_cancel: boolean;
+  items: string[];
+  total_quantity: number;
+}
