@@ -79,12 +79,14 @@ const LocationScreen = () => {
   };
 
   const onPressSavedAddress = (address: {
+    id: string;
     postalCode: string;
     place: string;
     city: string;
     district: string;
   }) => {
     setLocation({
+      id: address.id,
       postalCode: address.postalCode,
       place: address.district,
       city: address.city,
@@ -195,6 +197,7 @@ const LocationScreen = () => {
                 activeOpacity={0.7}
                 onPress={() =>
                   onPressSavedAddress({
+                    id: item.id,
                     postalCode: item.pin,
                     city: item.city_or_town,
                     district: item.district,

@@ -66,14 +66,14 @@ const ProductListHeader = ({
             </Text>
           </View>
           {/* Title and quantity - END */}
-          <View className="mt-2 w-full flex-row items-center justify-between">
+          <View className="mt-2 w-full flex-row items-end justify-between">
             {/* Price set - START */}
             <View className="flex-row items-center space-x-2">
               <Text
                 className="font-pbold text-xl text-secondary"
                 style={{
                   includeFontPadding: false,
-                  textAlignVertical: "center",
+                  textAlignVertical: "bottom",
                 }}
               >
                 ₹ {price}
@@ -82,7 +82,7 @@ const ProductListHeader = ({
                 className="font-pmedium text-secondary-muted line-through"
                 style={{
                   includeFontPadding: false,
-                  textAlignVertical: "center",
+                  textAlignVertical: "bottom",
                 }}
               >
                 ₹{mrp}

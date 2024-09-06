@@ -3,7 +3,6 @@ import ProductList from "@/components/product/ProductList";
 import ProductListHeader from "@/components/product/ProductListHeader";
 import ScreenHeader from "@/components/ScreenHeader";
 import ProductSkeleton from "@/components/skeletons/ProductSkeleton";
-import ActionButton from "@/components/ui/ActionButton";
 import { icons } from "@/constants";
 import { getProduct, getProducts } from "@/lib/api/product.api";
 import { useUser } from "@/stores/useUserStore";
@@ -62,15 +61,6 @@ const ProductScreen = () => {
             }
             data={products?.filter((item) => item.id !== id)}
             isLoading={isProductsLoading}
-          />
-          <ActionButton
-            title="Instant Buy"
-            iconLeft={icons.info}
-            containerStyles={{
-              position: "absolute",
-              bottom: 20,
-              right: 20,
-            }}
           />
           <FloatingCart className="absolute bottom-0 mb-5" />
         </>

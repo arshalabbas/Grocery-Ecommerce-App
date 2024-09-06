@@ -46,3 +46,17 @@ export const addNewAddress = (address: Omit<Address, "id">) => {
       });
   });
 };
+
+// Get a address
+export const getAddress = ({ id }: { id: string }) => {
+  return new Promise<Address>((resolve, reject) => {
+    api
+      .get(`/customer/address/${id}`)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        reject(error.response.data);
+      });
+  });
+};

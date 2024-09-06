@@ -11,6 +11,7 @@ export interface User {
 
 // Location Types
 export interface Location {
+  id?: string;
   postalCode: string;
   place: string;
   city: string;
