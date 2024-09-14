@@ -32,19 +32,18 @@ const ProductList = ({ isLoading, ...props }: Props) => {
       )}
       ListEmptyComponent={
         <View className="w-full flex-1 items-center justify-center">
-          {isLoading ? (
-            <ActivityIndicator color={colors.primary.DEFAULT} size={"small"} />
-          ) : (
-            <Text className="font-pbold text-secondary-muted">
-              No Products Found!
-            </Text>
-          )}
+          <Text className="font-pbold text-secondary-muted">
+            No Products Found!
+          </Text>
         </View>
       }
       ListFooterComponent={
         <View className="my-10">
+          {isLoading && (
+            <ActivityIndicator color={colors.primary.DEFAULT} size={"small"} />
+          )}
           <Text className="text-center font-psemibold text-secondary-muted">
-            You're at the end!
+            {isLoading ? "Loading..." : "You're at the end!"}
           </Text>
         </View>
       }

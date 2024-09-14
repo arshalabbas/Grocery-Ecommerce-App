@@ -61,6 +61,12 @@ export interface ProductData {
   in_wishlist: boolean;
 }
 
+export interface ProductCursor {
+  next: string | null;
+  previous: string | null;
+  results: ProductData[];
+}
+
 // Wishlist Types
 
 export interface WishListItem {

@@ -1,4 +1,4 @@
-import { ProductData, SubCategory } from "@/types";
+import { ProductCursor, ProductData, SubCategory } from "@/types";
 import api from "./axios";
 
 export const getProducts = ({
@@ -6,16 +6,18 @@ export const getProducts = ({
   category,
   district,
   search,
+  cursor,
 }: {
   pincode?: string;
   category?: string;
   district?: string;
   search?: string;
+  cursor?: string;
 }) => {
-  return new Promise<ProductData[]>((resolve, reject) => {
+  return new Promise<ProductCursor>((resolve, reject) => {
     api
       .get(`/product/`, {
-        params: { pincode, district, category, search },
+        params: { pincode, district, category, search, cursor },
       })
       .then((response) => {
         resolve(response.data);

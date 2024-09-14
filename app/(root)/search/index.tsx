@@ -41,7 +41,7 @@ const SearchScreen = () => {
       />
       {/* Product list */}
       <FlashList
-        data={data}
+        data={data?.results}
         renderItem={({ item }) => <Text>{item.title}</Text>}
         estimatedItemSize={100}
       />

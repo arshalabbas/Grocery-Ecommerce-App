@@ -6,7 +6,7 @@ import { useUser } from "@/stores/useUserStore";
 import Header from "@/components/home/Header";
 import { StatusBar } from "expo-status-bar";
 import ListHeader from "@/components/home/ListHeader";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { getProducts, getSubCategories } from "@/lib/api/product.api";
 import { fetchLocationfromPin } from "@/lib/api/location.api";
 import HomeContentSkeleton from "@/components/skeletons/HomeContentSkeleton";
@@ -42,13 +42,26 @@ const Home = () => {
     enabled: isLocationSuccess,
   });
 
-  const { data, isLoading, refetch, isRefetching } = useQuery({
+  const {
+    data,
+    isLoading,
+    refetch,
+    isRefetching,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
     queryKey: ["product", postLocation?.District, activeCategory.title],
-    queryFn: () =>
+    queryFn: ({ pageParam }) =>
       getProducts({
         district: postLocation?.District,
         category: activeCategory.title,
+        cursor: pageParam,
       }),
+    initialPageParam: "",
+    getNextPageParam: (lastPage) => {
+      const urlParams = new URLSearchParams(lastPage.next || "");
+      return urlParams.get("cursor") || null;
+    },
     enabled: isCategorySuccess,
   });
 
@@ -112,11 +125,12 @@ const Home = () => {
             />
           }
           ListHeaderComponentStyle={{ marginBottom: 10 }}
-          data={data}
-          isLoading={isLoading}
+          data={data?.pages.map((page) => page.results).flat()}
+          isLoading={isLoading || isFetchingNextPage}
+          onEndReached={fetchNextPage}
+          onEndReachedThreshold={0.7}
         />
       )}
-      {/* <Loading isVisible={isLoading} /> */}
       <FloatingCart className="absolute bottom-0 mb-2" />
       <StatusBar style="dark" />
     </View>

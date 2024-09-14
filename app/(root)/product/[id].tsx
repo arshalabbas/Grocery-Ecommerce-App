@@ -6,7 +6,7 @@ import ProductSkeleton from "@/components/skeletons/ProductSkeleton";
 import { icons } from "@/constants";
 import { getProduct, getProducts } from "@/lib/api/product.api";
 import { useUser } from "@/stores/useUserStore";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { ImageSource } from "expo-image";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { View } from "react-native";
@@ -21,10 +21,24 @@ const ProductScreen = () => {
     queryFn: () => getProduct({ id }),
   });
 
-  const { data: products, isLoading: isProductsLoading } = useQuery({
+  const {
+    data: products,
+    isLoading: isProductsLoading,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
     queryKey: ["product", district, data?.sub_category],
-    queryFn: () =>
-      getProducts({ district: district, category: data?.sub_category.title }),
+    queryFn: ({ pageParam }) =>
+      getProducts({
+        district: district,
+        category: data?.sub_category.title,
+        cursor: pageParam,
+      }),
+    initialPageParam: "",
+    getNextPageParam: (lastPage) => {
+      const urlParams = new URLSearchParams(lastPage.next || "");
+      return urlParams.get("cursor") || null;
+    },
     enabled: isSuccess,
   });
 
@@ -60,8 +74,13 @@ const ProductScreen = () => {
                 hasWishlisted={data?.in_wishlist!}
               />
             }
-            data={products?.filter((item) => item.id !== id)}
-            isLoading={isProductsLoading}
+            data={products?.pages
+              .map((page) => page.results)
+              .flat()
+              .filter((item) => item.id !== id)}
+            isLoading={isProductsLoading || isFetchingNextPage}
+            onEndReached={fetchNextPage}
+            onEndReachedThreshold={0.7}
           />
           <FloatingCart className="absolute bottom-0 mb-5" />
         </>
