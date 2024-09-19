@@ -134,6 +134,7 @@ const WishlistCard = ({ id, title, itemsLength, items, totalPrice }: Props) => {
                 quantity={item.quantity}
                 totalPrice={item.total_price}
                 unit={item.product.unit}
+                fixedQuantity={item.product.fixed_quantity}
               />
             )}
             estimatedItemSize={100}

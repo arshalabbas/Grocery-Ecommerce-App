@@ -9,6 +9,7 @@ import Animated, {
 import CountButton from "../ui/CountButton";
 import { useCartStore } from "@/stores/useCartStore";
 import * as Haptics from "expo-haptics";
+import { formatQuantity } from "@/lib/utils";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -68,7 +69,10 @@ const CartItemCard = ({ id }: Props) => {
               </Text>
               <Text className="font-pregular text-xs text-secondary-muted">
                 ₹{cartProduct?.quantity! * cartProduct?.price!} •{" "}
-                {cartProduct?.quantity} {cartProduct?.unit}
+                {formatQuantity(
+                  cartProduct?.unit!,
+                  cartProduct?.fixedQuantity! * cartProduct?.quantity!,
+                )}
               </Text>
             </View>
           </View>

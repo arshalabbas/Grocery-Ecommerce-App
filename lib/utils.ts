@@ -68,3 +68,17 @@ export const formatDate = (date: Date | string) => {
 
   return formattedDate;
 };
+
+type Unit = "kg" | "g" | "ml" | "ltr" | string;
+
+export const formatQuantity = (unit: Unit, quantity: number): string => {
+  if (["kg", "ltr"].includes(unit)) return `${quantity} ${unit}`;
+
+  if (["g", "ml"].includes(unit) && quantity < 1000)
+    return `${quantity} ${unit}`;
+
+  if (["g", "ml"].includes(unit) && quantity >= 1000)
+    return `${(quantity / 1000).toFixed(1)} ${unit === "g" ? "kg" : "ltr"}`;
+
+  return `${quantity} ${unit}`;
+};

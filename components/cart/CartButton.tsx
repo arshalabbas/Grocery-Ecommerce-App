@@ -9,9 +9,21 @@ interface Props {
   title: string;
   price: number;
   unit: string;
+  fixedQuantity: number;
+  allowedLimit: number;
+  stock: number;
 }
 
-const CartButton = ({ id, image, title, price, unit }: Props) => {
+const CartButton = ({
+  id,
+  image,
+  title,
+  price,
+  unit,
+  fixedQuantity,
+  allowedLimit,
+  stock,
+}: Props) => {
   const location = useUser((state) => state.location);
   const cartProduct = useCartStore((state) => state.products)?.find(
     (item) => item.id === id,
@@ -27,12 +39,15 @@ const CartButton = ({ id, image, title, price, unit }: Props) => {
     } else {
       addProduct({
         id,
-        image: image,
-        title: title,
+        image,
+        title,
         quantity: 1,
-        price: price,
-        unit: unit,
+        price,
+        unit,
         district: location.district,
+        fixedQuantity,
+        allowedLimit,
+        stock,
       });
     }
   };

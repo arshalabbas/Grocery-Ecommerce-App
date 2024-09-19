@@ -69,14 +69,16 @@ export const isServicable = ({
   district: string;
   pincode: string;
 }) => {
-  return new Promise((resolve, reject) => {
-    api
-      .get("/block-area/", { params: { district, pincode } })
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((error) => {
-        reject(error.response.data);
-      });
-  });
+  return new Promise<{ message: { is_blocked: boolean; reason: string } }>(
+    (resolve, reject) => {
+      api
+        .get("/block-area/", { params: { district, pincode } })
+        .then((response) => {
+          resolve(response.data);
+        })
+        .catch((error) => {
+          reject(error.response.data);
+        });
+    },
+  );
 };

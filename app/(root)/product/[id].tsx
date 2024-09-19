@@ -72,6 +72,8 @@ const ProductScreen = () => {
                 fixedQuantity={data?.fixed_quantity!}
                 discount={data?.discount!}
                 hasWishlisted={data?.in_wishlist!}
+                stock={data?.stock!}
+                allowedLimit={data?.allowed_limit!}
               />
             }
             data={products?.pages

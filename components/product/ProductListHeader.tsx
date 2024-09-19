@@ -17,6 +17,8 @@ interface Props {
   fixedQuantity: number;
   discount: number;
   hasWishlisted: boolean;
+  stock: number;
+  allowedLimit: number;
 }
 
 const ProductListHeader = ({
@@ -29,6 +31,8 @@ const ProductListHeader = ({
   fixedQuantity,
   discount,
   hasWishlisted,
+  stock,
+  allowedLimit,
 }: Props) => {
   const router = useRouter();
   return (
@@ -111,6 +115,9 @@ const ProductListHeader = ({
               image={image as string}
               price={price}
               unit={unit}
+              fixedQuantity={fixedQuantity}
+              stock={stock}
+              allowedLimit={allowedLimit}
             />
           </View>
         </View>

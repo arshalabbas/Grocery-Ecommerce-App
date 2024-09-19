@@ -28,6 +28,8 @@ const ProductList = ({ isLoading, ...props }: Props) => {
           price={item.price}
           badgeText={item.discount >= 20 ? `${item.discount}% Off` : undefined}
           hasWishlisted={item.in_wishlist}
+          allowedLimit={item.allowed_limit}
+          stock={item.stock}
         />
       )}
       ListEmptyComponent={

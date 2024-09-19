@@ -9,6 +9,7 @@ import Animated, {
 import CountButton from "../ui/CountButton";
 import { useWishlistStore } from "@/stores/useWishlistStore";
 import { useEffect } from "react";
+import { formatQuantity } from "@/lib/utils";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -20,6 +21,7 @@ interface Props {
   quantity: number;
   totalPrice: number;
   unit: string;
+  fixedQuantity: number;
 }
 
 const WishlistItemCard = ({
@@ -30,6 +32,7 @@ const WishlistItemCard = ({
   quantity,
   totalPrice,
   unit,
+  fixedQuantity,
 }: Props) => {
   // states
   const incrementQuantity = useWishlistStore(
@@ -95,7 +98,7 @@ const WishlistItemCard = ({
                 {title}
               </Text>
               <Text className="font-pregular text-xs text-secondary-muted">
-                ₹{totalPrice} • {quantity} {unit}
+                ₹{totalPrice} • {formatQuantity(unit, quantity * fixedQuantity)}
               </Text>
             </View>
           </View>

@@ -25,6 +25,8 @@ interface Props {
   mrp: number;
   badgeText?: string;
   hasWishlisted: boolean;
+  allowedLimit: number;
+  stock: number;
 }
 
 const ProductCard = ({
@@ -37,6 +39,8 @@ const ProductCard = ({
   fixedQuantity,
   badgeText,
   hasWishlisted,
+  allowedLimit,
+  stock,
 }: Props) => {
   const router = useRouter();
   const scale = useSharedValue<number>(1);
@@ -109,6 +113,9 @@ const ProductCard = ({
             price={price}
             title={title}
             unit={unit}
+            fixedQuantity={fixedQuantity}
+            allowedLimit={allowedLimit}
+            stock={stock}
           />
         </View>
         {badgeText && (

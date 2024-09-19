@@ -8,6 +8,9 @@ interface Product {
   unit: string;
   quantity: number;
   district: string;
+  fixedQuantity: number;
+  allowedLimit: number;
+  stock: number;
 }
 
 interface CartState {
@@ -43,7 +46,13 @@ export const useCartStore = create<CartState>()((set) => ({
     set((state) => {
       const updatedProducts = state.products.map((product) => {
         if (product.id === productId) {
-          incrementedProduct = { ...product, quantity: product.quantity + 1 };
+          incrementedProduct = {
+            ...product,
+            quantity: Math.min(
+              product.quantity + 1,
+              Math.min(product.stock, product.allowedLimit),
+            ),
+          };
           return incrementedProduct;
         } else {
           return product;

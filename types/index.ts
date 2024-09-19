@@ -59,6 +59,7 @@ export interface ProductData {
   fixed_quantity: number;
   sub_category: SubCategory;
   in_wishlist: boolean;
+  allowed_limit: number;
 }
 
 export interface ProductCursor {
@@ -98,6 +99,7 @@ export interface Address {
 
 // orders types
 export type StatusFilter =
+  | ""
   | "all"
   | "processing"
   | "delivered"

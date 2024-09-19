@@ -20,7 +20,8 @@ const Orders = () => {
 
   const { data, isLoading } = useQuery({
     queryKey: ["order", activeFilter],
-    queryFn: () => getAllOrders({ status: activeFilter }),
+    queryFn: () =>
+      getAllOrders({ status: activeFilter === "all" ? "" : activeFilter }),
   });
 
   return (
@@ -71,7 +72,7 @@ const Orders = () => {
       </ScrollView>
       <FlashList
         className="flex-1"
-        data={data}
+        data={data?.toReversed()}
         renderItem={({ item }) => (
           <OrderCard
             id={item.id}

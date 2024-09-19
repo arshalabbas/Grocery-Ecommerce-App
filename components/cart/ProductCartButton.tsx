@@ -12,9 +12,21 @@ interface Props {
   image: ImageSource;
   price: number;
   unit: string;
+  fixedQuantity: number;
+  allowedLimit: number;
+  stock: number;
 }
 
-const ProductCartButton = ({ id, title, image, price, unit }: Props) => {
+const ProductCartButton = ({
+  id,
+  title,
+  image,
+  price,
+  unit,
+  fixedQuantity,
+  allowedLimit,
+  stock,
+}: Props) => {
   const router = useRouter();
 
   const cartData = useCartStore((state) => state.products).find(
@@ -35,6 +47,9 @@ const ProductCartButton = ({ id, title, image, price, unit }: Props) => {
         price,
         quantity: 1,
         unit,
+        fixedQuantity,
+        allowedLimit,
+        stock,
       });
     } else {
       router.push(`/(root)/product/${id}`);
@@ -43,6 +58,7 @@ const ProductCartButton = ({ id, title, image, price, unit }: Props) => {
 
   return (
     <IconButton
+      disabled={stock <= 0}
       icon={cartData ? icons.bagSuccess : icons.bag}
       className={cartData && "bg-secondary"}
       onPress={onPressCartButton}

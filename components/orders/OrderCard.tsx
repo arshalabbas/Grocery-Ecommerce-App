@@ -74,7 +74,7 @@ const OrderCard = ({
               }))}
             />
             <View>
-              <Text className="font-pbold text-lg">₹{price * quantity}</Text>
+              <Text className="font-pbold text-lg">₹{price}</Text>
               <Text className="font-psemibold text-gray-600">
                 {quantity} item{quantity > 1 && "s"}
               </Text>

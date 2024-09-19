@@ -47,7 +47,7 @@ const Cart = () => {
       }),
   });
 
-  console.log(servicableData);
+  console.log(servicableData?.message.is_blocked);
 
   const placeOrderMutation = useMutation({
     mutationFn: placeOrder,
@@ -167,6 +167,19 @@ const Cart = () => {
           onPress={() => router.push("/(root)/(modals)/select-address")}
         />
         <Divider />
+        {servicableData?.message.is_blocked && (
+          <>
+            <View>
+              <Text className="font-psemibold text-lg text-danger">
+                ❌ Area currently unservicable
+              </Text>
+              <Text className="font-pregular text-secondary">
+                {servicableData.message.reason}
+              </Text>
+            </View>
+            <Divider />
+          </>
+        )}
         <View className="mb-2 w-full flex-row items-center justify-between">
           <View>
             <CountText
@@ -180,17 +193,24 @@ const Cart = () => {
               suffix={"Items"}
             />
           </View>
+
           <Button
             title="Place Order"
             width={"no-width"}
             rounded={"xl"}
             variant={
-              products.length <= 0 || !addressId
+              products.length <= 0 ||
+              !addressId ||
+              servicableData?.message.is_blocked
                 ? "solid-disabled"
                 : "solid-primary"
             }
             onPress={onPressPlaceOrder}
-            disabled={products.length <= 0 || !addressId}
+            disabled={
+              products.length <= 0 ||
+              !addressId ||
+              servicableData?.message.is_blocked
+            }
           />
         </View>
       </View>
