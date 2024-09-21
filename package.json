@@ -50,7 +50,8 @@
     "tailwind-merge": "^2.5.2",
     "use-debounce": "^10.0.3",
     "zod": "^3.23.8",
-    "zustand": "^4.5.5"
+    "zustand": "^4.5.5",
+    "lottie-react-native": "6.7.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

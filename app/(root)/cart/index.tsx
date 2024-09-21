@@ -65,7 +65,7 @@ const Cart = () => {
         onSuccess: (data) => {
           clearCart();
           queryClient.invalidateQueries({ queryKey: ["order"] });
-          console.log(data);
+          router.replace("/(root)/cart/order-success");
         },
       },
     );

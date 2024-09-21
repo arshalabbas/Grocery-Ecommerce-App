@@ -8,7 +8,7 @@ const RootLayout = () => {
       <Stack.Screen name="product/[id]" />
       <Stack.Screen name="profile/index" />
       <Stack.Screen name="search/index" />
-      <Stack.Screen name="cart/index" />
+      <Stack.Screen name="cart" />
       <Stack.Screen name="address" />
       <Stack.Screen name="order/[id]" />
       <Stack.Screen
