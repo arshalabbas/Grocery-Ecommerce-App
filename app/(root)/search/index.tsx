@@ -1,12 +1,13 @@
 import FloatingCart from "@/components/cart/FloatingCart";
 import SearchInput from "@/components/form/SearchInput";
+import SearchItemCard from "@/components/search/SearchItemCard";
 import { getProducts } from "@/lib/api/product.api";
 import { useUser } from "@/stores/useUserStore";
 import { FlashList } from "@shopify/flash-list";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Text } from "react-native";
+import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDebouncedCallback } from "use-debounce";
 
@@ -41,9 +42,17 @@ const SearchScreen = () => {
       />
       {/* Product list */}
       <FlashList
+        showsVerticalScrollIndicator={false}
         data={data?.results}
-        renderItem={({ item }) => <Text>{item.title}</Text>}
+        renderItem={({ item }) => <SearchItemCard {...item} />}
         estimatedItemSize={100}
+        ListEmptyComponent={
+          <View className="flex-1 items-center justify-center p-10">
+            <Text className="font-semibold text-secondary-muted">
+              Search Items!
+            </Text>
+          </View>
+        }
       />
       <FloatingCart className="mb-5 px-0" />
     </SafeAreaView>

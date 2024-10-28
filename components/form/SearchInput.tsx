@@ -1,11 +1,12 @@
 import { icons } from "@/constants";
 import { Image } from "expo-image";
 import {
+  KeyboardAvoidingView,
+  Platform,
   StyleProp,
   TextInput,
   TextInputProps,
   TouchableOpacity,
-  View,
   ViewStyle,
 } from "react-native";
 
@@ -22,9 +23,10 @@ const SearchInput = ({
   ...props
 }: Props) => {
   return (
-    <View
+    <KeyboardAvoidingView
       className="mt-5 flex-row items-center overflow-hidden rounded-full border-[.5px] border-secondary-muted/50 bg-white"
       style={[containerStyles]}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <TouchableOpacity className="rounded-full p-4" onPress={onPressBack}>
         <Image
@@ -45,7 +47,7 @@ const SearchInput = ({
           contentFit="contain"
         />
       </TouchableOpacity>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
