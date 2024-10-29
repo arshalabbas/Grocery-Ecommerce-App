@@ -1,6 +1,7 @@
 import phone from "@/assets/icons/phone.svg";
 import india from "@/assets/icons/india.png";
 import location from "@/assets/icons/location.svg";
+import locationOutline from "@/assets/icons/location-outline.svg";
 import cart from "@/assets/icons/cart.svg";
 import plus from "@/assets/icons/plus.svg";
 import search from "@/assets/icons/search.svg";
@@ -16,6 +17,7 @@ import trash from "@/assets/icons/trash.svg";
 import add from "@/assets/icons/add.svg";
 import sub from "@/assets/icons/sub.svg";
 import save from "@/assets/icons/save.svg";
+import support from "@/assets/icons/support.svg";
 
 // Action Icons
 // Active
@@ -61,6 +63,7 @@ export default {
   orders,
   profile,
   location,
+  locationOutline,
   cart,
   plus,
   search,
@@ -77,4 +80,5 @@ export default {
   add,
   sub,
   save,
+  support,
 };

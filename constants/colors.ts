@@ -27,6 +27,7 @@ const colors: {
     delivered: "",
     cancelled: "",
     all: "",
+    "": "",
   },
 };
 
@@ -36,6 +37,7 @@ const status: Record<StatusFilter, string> = {
   delivered: colors.success,
   cancelled: colors.danger,
   all: colors.secondary.muted,
+  "": "",
 };
 
 colors.status = status;
