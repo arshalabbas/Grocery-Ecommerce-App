@@ -1,10 +1,11 @@
 import { ImageSource } from "expo-image";
 import icons from "./icons";
+import { Href } from "expo-router";
 
 interface ProfileOption {
   title: string;
   icon?: ImageSource;
-  route: string;
+  route: Href;
 }
 
 const profileOptions: ProfileOption[] = [
@@ -16,7 +17,7 @@ const profileOptions: ProfileOption[] = [
   {
     title: "Cart",
     icon: icons.bag,
-    route: "/cart",
+    route: "/(root)/cart/",
   },
   {
     title: "Addresses",
@@ -26,7 +27,7 @@ const profileOptions: ProfileOption[] = [
   {
     title: "Order History",
     icon: icons.orders.inactive,
-    route: "/orders",
+    route: "/(root)/(tabs)/orders",
   },
   {
     title: "Customer Support",
@@ -35,15 +36,15 @@ const profileOptions: ProfileOption[] = [
   },
   {
     title: "Terms and Conditions",
-    route: "",
+    route: "https://example.com/terms-and-conditions",
   },
   {
     title: "Privacy Policy",
-    route: "",
+    route: "https://example.com/privacy-policy",
   },
   {
     title: "Open Source License",
-    route: "",
+    route: "https://example.com/open-source-license",
   },
 ];
 

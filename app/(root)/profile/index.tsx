@@ -2,7 +2,6 @@ import Loading from "@/components/misc/Loading";
 import OptionsListItem from "@/components/profile/OptionsListItem";
 import ScreenHeader from "@/components/ScreenHeader";
 import ActionButton from "@/components/ui/ActionButton";
-import Button from "@/components/ui/Button";
 import Divider from "@/components/ui/Divider";
 import { colors } from "@/constants";
 import { profileOptions } from "@/constants/profile";
@@ -11,13 +10,15 @@ import { useAuth } from "@/stores/useAuthStore";
 import { useUser } from "@/stores/useUserStore";
 import { useMutation } from "@tanstack/react-query";
 import { Image } from "expo-image";
-import { Stack } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { FlatList, Text, View } from "react-native";
 
 const Profile = () => {
   const { user, clearUser } = useUser();
   const signOut = useAuth((state) => state.signOut);
+
+  const router = useRouter();
 
   // Logout Mock
   const logoutMutation = useMutation({
@@ -63,7 +64,13 @@ const Profile = () => {
           </View>
         }
         renderItem={({ item }) => (
-          <OptionsListItem title={item.title} icon={item.icon} />
+          <OptionsListItem
+            title={item.title}
+            icon={item.icon}
+            onPress={() => {
+              router.push(item.route);
+            }}
+          />
         )}
         contentContainerStyle={{ paddingHorizontal: 20 }}
         ItemSeparatorComponent={() => <Divider />}
