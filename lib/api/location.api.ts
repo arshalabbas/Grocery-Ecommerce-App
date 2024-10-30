@@ -1,6 +1,7 @@
 import { Address, PostOfficeData } from "@/types";
 import axios from "axios";
 import api from "./axios";
+import { AddressSchema } from "../validation/address.validation";
 
 export const fetchLocationfromPin = (pinCode: string) => {
   return new Promise<PostOfficeData>((resolve, reject) => {
@@ -47,11 +48,53 @@ export const addNewAddress = (address: Omit<Address, "id">) => {
   });
 };
 
-// Get a address
+// Get an address
 export const getAddress = ({ id }: { id: string }) => {
   return new Promise<Address>((resolve, reject) => {
     api
       .get(`/customer/address/${id}`)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        reject(error.response.data);
+      });
+  });
+};
+
+// Update an address
+export const updateAddress = ({
+  id,
+  values,
+}: {
+  id: string;
+  values: AddressSchema;
+}) => {
+  return new Promise<{ message: string }>((resolve, reject) => {
+    api
+      .put(`/customer/address/${id}`, {
+        name: values.name,
+        phone: values.phone,
+        alt_phone: values.altPhone,
+        city_or_town: values.city,
+        pin: values.pincode,
+        district: values.district,
+        landmark: values.landmark,
+      })
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        reject(error.response.data);
+      });
+  });
+};
+
+// Delete an address
+export const deleteAddress = ({ id }: { id: string }) => {
+  return new Promise<{ message: string }>((resolve, reject) => {
+    api
+      .delete(`/customer/address/${id}`)
       .then((response) => {
         resolve(response.data);
       })

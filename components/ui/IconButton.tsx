@@ -1,3 +1,4 @@
+import { colors } from "@/constants";
 import { Image, ImageSource } from "expo-image";
 import { Pressable, PressableProps, StyleProp, ViewStyle } from "react-native";
 import Animated, {
@@ -11,9 +12,16 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 interface Props extends PressableProps {
   containerStyles?: StyleProp<ViewStyle>;
   icon: ImageSource;
+  iconTint?: string;
 }
 
-const IconButton = ({ containerStyles, className, icon, ...props }: Props) => {
+const IconButton = ({
+  containerStyles,
+  iconTint = "#fff",
+  className,
+  icon,
+  ...props
+}: Props) => {
   const scale = useSharedValue<number>(1);
 
   const onPressIn = () => {
@@ -36,7 +44,12 @@ const IconButton = ({ containerStyles, className, icon, ...props }: Props) => {
       style={[animatedStyles, containerStyles]}
       {...props}
     >
-      <Image source={icon} className="aspect-square w-5" contentFit="contain" />
+      <Image
+        source={icon}
+        className="aspect-square w-5"
+        tintColor={iconTint}
+        contentFit="contain"
+      />
     </AnimatedPressable>
   );
 };
