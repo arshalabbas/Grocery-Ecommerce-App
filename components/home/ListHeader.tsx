@@ -1,8 +1,7 @@
 import { Image } from "expo-image";
 import { ScrollView, TouchableOpacity, View } from "react-native";
-import dummy from "@/constants/dummy";
 import MockSearchButton from "../misc/MockSearchButton";
-import { SubCategory } from "@/types";
+import { Banner, SubCategory } from "@/types";
 import clsx from "clsx";
 import Animated, {
   useAnimatedStyle,
@@ -10,27 +9,50 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { useRouter } from "expo-router";
+import Swiper from "react-native-swiper";
+import { useRef } from "react";
+import { colors } from "@/constants";
 
 interface Props {
+  banners: Banner[];
   subCategories: SubCategory[];
   activeCategory: { id: string; title: string };
   setActiveCategory: (category: { id: string; title: string }) => void;
 }
 
 const ListHeader = ({
+  banners,
   subCategories,
   activeCategory,
   setActiveCategory,
 }: Props) => {
+  const swiperRef = useRef<Swiper>(null);
   const router = useRouter();
+
   return (
     <View>
-      <Image
-        className="w-full rounded-xl"
-        style={{ aspectRatio: 2.5 / 1 }}
-        source={dummy.banner}
-        contentFit="cover"
-      />
+      <Swiper
+        ref={swiperRef}
+        autoplay
+        activeDotColor={colors.primary.DEFAULT}
+        containerStyle={{
+          width: "100%",
+          aspectRatio: 16 / 6,
+        }}
+      >
+        {banners.map((item) => (
+          <View
+            className="h-full w-full overflow-hidden rounded-lg p-2"
+            key={item.id}
+          >
+            <Image
+              source={item.image}
+              className="h-full w-full rounded-lg"
+              contentFit="cover"
+            />
+          </View>
+        ))}
+      </Swiper>
       <MockSearchButton onPress={() => router.push("/(root)/search")} />
       <ScrollView
         horizontal

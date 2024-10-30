@@ -1,4 +1,3 @@
-import { colors } from "@/constants";
 import { Image, ImageSource } from "expo-image";
 import { Pressable, PressableProps, StyleProp, ViewStyle } from "react-native";
 import Animated, {

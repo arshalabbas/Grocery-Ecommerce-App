@@ -12,6 +12,7 @@ import { fetchLocationfromPin } from "@/lib/api/location.api";
 import HomeContentSkeleton from "@/components/skeletons/HomeContentSkeleton";
 import FloatingCart from "@/components/cart/FloatingCart";
 import ProductList from "@/components/product/ProductList";
+import { getBanners } from "@/lib/api/app.api";
 
 const Home = () => {
   const userLocation = useUser((state) => state.location);
@@ -43,6 +44,16 @@ const Home = () => {
   });
 
   const {
+    data: banners,
+    isLoading: isBannersLoading,
+    isSuccess: isBannersSuccess,
+  } = useQuery({
+    queryKey: ["banner"],
+    queryFn: getBanners,
+    enabled: isCategorySuccess,
+  });
+
+  const {
     data,
     isLoading,
     refetch,
@@ -62,7 +73,7 @@ const Home = () => {
       const urlParams = new URLSearchParams(lastPage.next || "");
       return urlParams.get("cursor") || null;
     },
-    enabled: isCategorySuccess,
+    enabled: isBannersSuccess,
   });
 
   useEffect(() => {
@@ -110,7 +121,7 @@ const Home = () => {
           header: () => <Header />,
         }}
       />
-      {isPostLocationLoading || isCategoriesLoading ? (
+      {isPostLocationLoading || isCategoriesLoading || isBannersLoading ? (
         <HomeContentSkeleton />
       ) : (
         <ProductList
@@ -119,6 +130,7 @@ const Home = () => {
           }
           ListHeaderComponent={
             <ListHeader
+              banners={banners || []}
               subCategories={categories || []}
               setActiveCategory={onPressCategory}
               activeCategory={activeCategory}

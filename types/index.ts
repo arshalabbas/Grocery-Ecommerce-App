@@ -140,3 +140,11 @@ export interface FewerOrder {
   items: string[];
   total_quantity: number;
 }
+
+// Banner
+export interface Banner {
+  id: string;
+  image: string;
+  title: string;
+  link: string;
+}
