@@ -12,7 +12,7 @@ const profileOptions: ProfileOption[] = [
   {
     title: "Edit Profile",
     icon: icons.edit,
-    route: "/edit-profile",
+    route: "/(root)/profile/edit-profile",
   },
   {
     title: "Cart",
@@ -22,7 +22,7 @@ const profileOptions: ProfileOption[] = [
   {
     title: "Addresses",
     icon: icons.locationOutline,
-    route: "/addresses",
+    route: "/(root)/address/",
   },
   {
     title: "Order History",
@@ -32,7 +32,7 @@ const profileOptions: ProfileOption[] = [
   {
     title: "Customer Support",
     icon: icons.support,
-    route: "/customer-support",
+    route: "https://example.com/customer-support",
   },
   {
     title: "Terms and Conditions",
