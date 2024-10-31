@@ -4,6 +4,7 @@ import ActionButton from "@/components/ui/ActionButton";
 import { colors, icons } from "@/constants";
 import { getTimeData } from "@/lib/api/app.api";
 import { cancelOrder, getOrder } from "@/lib/api/orders.api";
+import { arrivingMessage } from "@/lib/utils";
 import { FlashList } from "@shopify/flash-list";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Image } from "expo-image";
@@ -41,12 +42,6 @@ const OrderScreen = () => {
       },
     );
   };
-
-  function arrivingMessage() {
-    if (!time) return;
-    if (time.hour > 16 && time.minute > 30) return "Arriving Tomorrow";
-    else return "Arriving Today";
-  }
 
   return (
     <View className="flex-1 bg-background">
@@ -94,7 +89,7 @@ const OrderScreen = () => {
               {data?.status !== "cancelled" && data?.status !== "delivered" && (
                 <View className="mt-2">
                   <Text className="font-psemibold text-lg text-success">
-                    {arrivingMessage()}
+                    {arrivingMessage(time)}
                   </Text>
                 </View>
               )}

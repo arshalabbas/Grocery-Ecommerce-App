@@ -3,6 +3,7 @@ import OrderCard from "@/components/orders/OrderCard";
 import { colors, icons } from "@/constants";
 import { getTimeData } from "@/lib/api/app.api";
 import { getAllOrders } from "@/lib/api/orders.api";
+import { arrivingMessage } from "@/lib/utils";
 import { StatusFilter } from "@/types";
 import { FlashList } from "@shopify/flash-list";
 import { useQuery } from "@tanstack/react-query";
@@ -29,12 +30,6 @@ const Orders = () => {
     queryKey: [],
     queryFn: getTimeData,
   });
-
-  function arrivingMessage() {
-    if (!time) return;
-    if (time.hour > 16 && time.minute > 30) return "Arriving Tomorrow";
-    else return "Arriving Today";
-  }
 
   return (
     <View className="flex-1 bg-background">
@@ -94,7 +89,7 @@ const Orders = () => {
             status={item.status}
             price={item.buy_price}
             quantity={item.total_quantity}
-            globalDeliveryMessage={arrivingMessage()}
+            globalDeliveryMessage={arrivingMessage(time)}
           />
         )}
         ListEmptyComponent={

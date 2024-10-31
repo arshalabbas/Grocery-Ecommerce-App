@@ -1,3 +1,4 @@
+import { TimeData } from "@/types";
 import clsx, { ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -81,4 +82,13 @@ export const formatQuantity = (unit: Unit, quantity: number): string => {
     return `${(quantity / 1000).toFixed(1)} ${unit === "g" ? "kg" : "ltr"}`;
 
   return `${quantity} ${unit}`;
+};
+
+// returns the arriving message from the time data
+export const arrivingMessage = (time: TimeData | undefined) => {
+  if (!time) return;
+  // checking if the time is more than 4:30 PM
+  if (time.hour > 16 || (time.hour === 16 && time.minute > 30))
+    return "Arriving Tomorrow";
+  else return "Arriving Today";
 };
