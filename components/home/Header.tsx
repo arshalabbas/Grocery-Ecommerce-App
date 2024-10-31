@@ -3,14 +3,22 @@ import { useUser } from "@/stores/useUserStore";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { View, Text, StatusBar, TouchableOpacity } from "react-native";
+import Animated, { FadeInDown, FadeOutDown } from "react-native-reanimated";
 
-const Header = () => {
+const AnimatedTouchableOpacity =
+  Animated.createAnimatedComponent(TouchableOpacity);
+
+const Header = ({
+  searchIconVisible = false,
+}: {
+  searchIconVisible?: boolean;
+}) => {
   const location = useUser((state) => state.location);
   const user = useUser((state) => state.user);
   const router = useRouter();
   return (
     <View
-      className="w-full border-b-[.5px] border-secondary-muted/50 bg-white"
+      className="w-full overflow-hidden border-b-[.5px] border-secondary-muted/50 bg-white"
       style={{ paddingTop: StatusBar.currentHeight }}
     >
       <View className="w-full flex-row items-center justify-between p-3">
@@ -46,16 +54,35 @@ const Header = () => {
             </Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          className="aspect-square w-10 overflow-hidden rounded-full border border-primary"
-          onPress={() => router.push("/(root)/profile")}
-        >
-          <Image
-            className="h-full w-full"
-            source={`https://api.dicebear.com/9.x/thumbs/svg?seed=${user.name.toLowerCase().replace(" ", "-")}&backgroundColor=transparent&shapeColor=f88c49`}
-          />
-        </TouchableOpacity>
+        <View className="flex-row items-center space-x-1">
+          {searchIconVisible && (
+            <AnimatedTouchableOpacity
+              entering={FadeInDown}
+              exiting={FadeOutDown}
+              activeOpacity={0.7}
+              onPress={() => {
+                router.push("/(root)/search");
+              }}
+              className="p-3"
+            >
+              <Image
+                source={icons.search}
+                className="aspect-square w-5"
+                contentFit="contain"
+              />
+            </AnimatedTouchableOpacity>
+          )}
+          <TouchableOpacity
+            activeOpacity={0.7}
+            className="aspect-square w-10 overflow-hidden rounded-full border border-primary"
+            onPress={() => router.push("/(root)/profile")}
+          >
+            <Image
+              className="h-full w-full"
+              source={`https://api.dicebear.com/9.x/thumbs/svg?seed=${user.name.toLowerCase().replace(" ", "-")}&backgroundColor=transparent&shapeColor=f88c49`}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );

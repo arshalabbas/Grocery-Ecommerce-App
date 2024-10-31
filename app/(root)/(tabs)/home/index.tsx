@@ -1,4 +1,9 @@
-import { View, RefreshControl } from "react-native";
+import {
+  View,
+  RefreshControl,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { Stack, router } from "expo-router";
 import * as Location from "expo-location";
@@ -18,6 +23,8 @@ const Home = () => {
   const userLocation = useUser((state) => state.location);
   const setLocation = useUser((state) => state.setLocation);
   const updateDistrict = useUser((state) => state.updateDistrict);
+
+  const [searchIconVisibility, setSearchIconVisibility] = useState(false);
 
   const [activeCategory, setActiveCategory] = useState<{
     id: string;
@@ -114,11 +121,20 @@ const Home = () => {
     setActiveCategory(category);
   };
 
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const yOffset = event.nativeEvent.contentOffset.y;
+    if (yOffset > 180) {
+      setSearchIconVisibility(true);
+    } else {
+      setSearchIconVisibility(false);
+    }
+  };
+
   return (
     <View className="flex-1 items-center bg-background">
       <Stack.Screen
         options={{
-          header: () => <Header />,
+          header: () => <Header searchIconVisible={searchIconVisibility} />,
         }}
       />
       {isPostLocationLoading || isCategoriesLoading || isBannersLoading ? (
@@ -141,6 +157,7 @@ const Home = () => {
           isLoading={isLoading || isFetchingNextPage}
           onEndReached={fetchNextPage}
           onEndReachedThreshold={0.7}
+          onScroll={handleScroll}
         />
       )}
       <FloatingCart className="absolute bottom-0 mb-2" />
