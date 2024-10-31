@@ -2,6 +2,7 @@ import Loading from "@/components/misc/Loading";
 import ScreenHeader from "@/components/ScreenHeader";
 import ActionButton from "@/components/ui/ActionButton";
 import { colors, icons } from "@/constants";
+import { getTimeData } from "@/lib/api/app.api";
 import { cancelOrder, getOrder } from "@/lib/api/orders.api";
 import { FlashList } from "@shopify/flash-list";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -16,6 +17,11 @@ const OrderScreen = () => {
   const { data, isLoading } = useQuery({
     queryKey: ["order", id],
     queryFn: () => getOrder({ id }),
+  });
+
+  const { data: time } = useQuery({
+    queryKey: [],
+    queryFn: getTimeData,
   });
 
   const cancelOrderMutation = useMutation({
@@ -35,6 +41,12 @@ const OrderScreen = () => {
       },
     );
   };
+
+  function arrivingMessage() {
+    if (!time) return;
+    if (time.hour > 16 && time.minute > 30) return "Arriving Tomorrow";
+    else return "Arriving Today";
+  }
 
   return (
     <View className="flex-1 bg-background">
@@ -79,7 +91,14 @@ const OrderScreen = () => {
                   />
                 )}
               </View>
-              <View className="mt-4">
+              {data?.status !== "cancelled" && data?.status !== "delivered" && (
+                <View className="mt-2">
+                  <Text className="font-psemibold text-lg text-success">
+                    {arrivingMessage()}
+                  </Text>
+                </View>
+              )}
+              <View className="mt-2">
                 <Text className="font-psemibold text-xs text-secondary-muted">
                   Ordered Address:
                 </Text>

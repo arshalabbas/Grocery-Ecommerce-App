@@ -11,7 +11,6 @@ import Animated, {
 import { useRouter } from "expo-router";
 import Swiper from "react-native-swiper";
 import { useRef } from "react";
-import { colors } from "@/constants";
 
 interface Props {
   banners: Banner[];
@@ -34,11 +33,11 @@ const ListHeader = ({
       <Swiper
         ref={swiperRef}
         autoplay
-        activeDotColor={colors.primary.DEFAULT}
         containerStyle={{
           width: "100%",
           aspectRatio: 16 / 6,
         }}
+        showsPagination={false}
       >
         {banners.map((item) => (
           <View

@@ -21,6 +21,7 @@ interface Props {
   price: number;
   status: StatusFilter;
   quantity: number;
+  globalDeliveryMessage: string | undefined;
 }
 
 const OrderCard = ({
@@ -31,6 +32,7 @@ const OrderCard = ({
   price,
   status,
   quantity,
+  globalDeliveryMessage,
 }: Props) => {
   const scale = useSharedValue<number>(1);
 
@@ -80,12 +82,19 @@ const OrderCard = ({
               </Text>
             </View>
           </View>
-          <Text
-            className="font-pbold capitalize"
-            style={{ color: colors.status[status] }}
-          >
-            {status}
-          </Text>
+          <View className="items-end">
+            <Text
+              className="font-pbold capitalize"
+              style={{ color: colors.status[status] }}
+            >
+              {status}
+            </Text>
+            {status !== "cancelled" && status !== "delivered" && (
+              <Text className="font-pmedium text-success">
+                {globalDeliveryMessage}
+              </Text>
+            )}
+          </View>
         </View>
         <Text className="mt-2 w-full text-right font-pregular text-xs text-secondary-muted">
           {formatDate(date)}
